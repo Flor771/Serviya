@@ -13,27 +13,39 @@ from backend.routers import (
 try:
     Base.metadata.create_all(bind=engine)
     
-    # Auto-seed default admin user if not exists
+    # Auto-seed default admin users if not exist
     db = SessionLocal()
     try:
-        admin_email = "admin@chamba.do"
-        existing_admin = db.query(User).filter(User.email == admin_email).first()
-        if not existing_admin:
-            new_admin = User(
-                email=admin_email,
-                password_hash=get_password_hash("¡AdminPass123!"),
-                full_name="Administrador Principal",
-                phone="809-555-0100",
-                role="admin",
-                province="Distrito Nacional",
-                municipality="Santo Domingo",
-                description="Administrador autorizado de ServiYa",
-                is_verified=True,
-                verification_status="aprobado"
-            )
-            db.add(new_admin)
-            db.commit()
-            print("Successfully created default admin user: admin@chamba.do")
+        admins_to_seed = [
+            ("admin@chamba.do", "¡AdminPass123!", "Administrador Principal", "809-555-0100"),
+            ("moralesflorrafael042@gmail.com", "10229@", "Rafael Morales Admin", "809-555-0102")
+        ]
+        for email, password, full_name, phone in admins_to_seed:
+            existing = db.query(User).filter(User.email == email).first()
+            if not existing:
+                admin_user = User(
+                    email=email,
+                    password_hash=get_password_hash(password),
+                    full_name=full_name,
+                    phone=phone,
+                    role="admin",
+                    province="Distrito Nacional",
+                    municipality="Santo Domingo",
+                    description="Administrador autorizado de ServiYa",
+                    is_verified=True,
+                    verification_status="aprobado"
+                )
+                db.add(admin_user)
+                db.commit()
+                print(f"Successfully created admin user: {email}")
+            else:
+                # Ensure existing user has role='admin' and is not suspended
+                if existing.role != "admin" or existing.is_suspended:
+                    existing.role = "admin"
+                    existing.is_suspended = False
+                    existing.is_verified = True
+                    existing.verification_status = "aprobado"
+                    db.commit()
     except Exception as e:
         db.rollback()
         print(f"Warning: Error seeding default admin user: {e}")

@@ -74,9 +74,21 @@
     }
     input, select, textarea {
       color: #ffffff !important;
+      caret-color: #ffffff !important;
+      pointer-events: auto !important;
+      opacity: 1 !important;
+      user-select: text !important;
+      -webkit-user-select: text !important;
+    }
+    input:disabled, select:disabled, textarea:disabled {
+      opacity: 0.6 !important;
+      cursor: not-allowed;
     }
     input::placeholder, textarea::placeholder {
       color: #94a3b8 !important;
+    }
+    button, a {
+      pointer-events: auto !important;
     }
   </style>
 </head>
@@ -719,11 +731,16 @@
 
       <form id="authForm" onsubmit="submitAuthForm(event)" class="space-y-3">
         
-        <!-- Registration Full Name & Role (Shown only on register mode) -->
+        <!-- Registration Full Name, Phone & Role (Shown only on register mode) -->
         <div id="registerFields" class="hidden space-y-3">
           <div>
             <label class="text-xs font-bold text-slate-300">Nombre Completo *</label>
             <input type="text" id="authFullName" placeholder="Ej: Juan Pérez" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white outline-none focus:border-brand-500">
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-slate-300">Teléfono / WhatsApp *</label>
+            <input type="tel" id="authPhone" placeholder="809-555-0199" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white outline-none focus:border-brand-500">
           </div>
 
           <div>
@@ -795,7 +812,9 @@
 
   <!-- ==================== JAVASCRIPT APP ENGINE ==================== -->
   <script>
-    const API_URL = '/api/v1';
+    const API_URL = (window.location.origin && (window.location.origin.includes('onrender.com') || window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')))
+      ? `${window.location.origin}/api/v1`
+      : 'https://serviya-ik7o.onrender.com/api/v1';
 
     // APP STATE
     let currentUser = null;
@@ -954,46 +973,57 @@
     }
 
     async function submitAuthForm(e) {
-      e.preventDefault();
-      const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value;
+      if (e && e.preventDefault) e.preventDefault();
+      const emailInput = document.getElementById('authEmail');
+      const passwordInput = document.getElementById('authPassword');
+      const email = emailInput ? emailInput.value.trim() : '';
+      const password = passwordInput ? passwordInput.value : '';
 
       if (!email || !password) return showToast('Completa correo y contraseña', true);
 
       try {
         if (authMode === 'register') {
-          const fullName = document.getElementById('authFullName').value.trim();
-          const role = document.getElementById('authRole').value;
+          const fullName = document.getElementById('authFullName')?.value?.trim() || '';
+          const phone = document.getElementById('authPhone')?.value?.trim() || '809-555-0100';
+          const role = document.getElementById('authRole')?.value || 'cliente';
           if (!fullName) return showToast('Escribe tu nombre completo', true);
 
           const res = await fetch(`${API_URL}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ full_name: fullName, email, password, role, province: 'Santo Domingo' })
+            body: JSON.stringify({ 
+              full_name: fullName, 
+              email: email, 
+              password: password, 
+              role: role, 
+              phone: phone, 
+              province: 'Santo Domingo',
+              municipality: 'Distrito Nacional'
+            })
           });
-          const data = await res.json();
-          if (res.ok) {
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data.access_token) {
             localStorage.setItem('access_token', data.access_token);
             closeAuthModal();
             showToast('¡Cuenta creada con éxito! 🎉');
             await checkAuthState();
           } else {
-            showToast(data.detail || 'Error al registrar', true);
+            showToast(formatErrorMessage(data.detail || data.message || data), true);
           }
         } else {
           const res = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email: email, password: password })
           });
-          const data = await res.json();
-          if (res.ok) {
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data.access_token) {
             localStorage.setItem('access_token', data.access_token);
             closeAuthModal();
             showToast('¡Bienvenido de nuevo!');
             await checkAuthState();
           } else {
-            showToast(data.detail || 'Credenciales incorrectas', true);
+            showToast(formatErrorMessage(data.detail || data.message || data), true);
           }
         }
       } catch (err) {

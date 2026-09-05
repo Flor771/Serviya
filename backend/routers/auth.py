@@ -39,20 +39,27 @@ def register_user(request: UserRegisterRequest, db: Session = Depends(get_db)):
             detail="Ya existe una cuenta registrada con este correo electrónico."
         )
     
-    new_user = User(
-        email=request.email.lower().strip(),
-        password_hash=get_password_hash(request.password),
-        full_name=request.full_name.strip(),
-        phone=request.phone,
-        role=valid_role,
-        province=request.province or "Santo Domingo",
-        municipality=request.municipality or "Distrito Nacional",
-        description=request.description or "",
-        experience_years=request.experience_years or 1
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+    try:
+        new_user = User(
+            email=request.email.lower().strip(),
+            password_hash=get_password_hash(request.password),
+            full_name=request.full_name.strip(),
+            phone=request.phone,
+            role=valid_role,
+            province=request.province or "Santo Domingo",
+            municipality=request.municipality or "Distrito Nacional",
+            description=request.description or "",
+            experience_years=request.experience_years or 1
+        )
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error al registrar usuario en la base de datos: {str(e)}"
+        )
     
     token = create_access_token(data={"sub": new_user.id, "role": new_user.role})
     return TokenResponse(access_token=token, user=UserResponse.model_validate(new_user))
