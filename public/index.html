@@ -63,6 +63,21 @@
       background-color: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(6px);
     }
+    /* Fix Chrome/Android dark mode input autofill & text visibility */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 30px #0f172a inset !important;
+      -webkit-text-fill-color: #ffffff !important;
+      caret-color: #ffffff !important;
+    }
+    input, select, textarea {
+      color: #ffffff !important;
+    }
+    input::placeholder, textarea::placeholder {
+      color: #94a3b8 !important;
+    }
   </style>
 </head>
 <body class="bg-darkbg text-slate-100 min-h-screen pb-24 md:pb-8">
@@ -789,17 +804,35 @@
     let authMode = 'login'; // 'login' or 'register'
     let activeChatChambaId = null;
 
+    function formatErrorMessage(detail) {
+      if (!detail) return 'Ocurrió un error inesperado';
+      if (typeof detail === 'string') return detail;
+      if (Array.isArray(detail)) {
+        return detail.map(d => d.msg || JSON.stringify(d)).join(', ');
+      }
+      if (typeof detail === 'object') {
+        return detail.msg || detail.message || JSON.stringify(detail);
+      }
+      return String(detail);
+    }
+
     // INITIALIZATION
-    window.addEventListener('DOMContentLoaded', () => {
+    function initApp() {
       checkAuthState();
       loadChambas();
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
 
     // TOAST NOTIFICATION HELPERS
     function showToast(text, isError = false) {
       const toast = document.getElementById('globalToast');
       const toastText = document.getElementById('toastText');
-      toastText.textContent = text;
+      toastText.textContent = formatErrorMessage(text);
       toast.className = `mb-4 p-3.5 rounded-xl text-sm font-semibold border transition-all flex items-center justify-between ${
         isError ? 'bg-rose-950/80 text-rose-300 border-rose-800' : 'bg-brand-950/80 text-brand-300 border-brand-800'
       }`;
@@ -1030,6 +1063,7 @@
       grid.innerHTML = filtered.map(c => {
         const priceFormatted = 'RD$ ' + Number(c.budget_rd || 0).toLocaleString();
         const createdDate = new Date(c.created_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'short' });
+        const photosCount = (c.photos || []).length;
         
         return `
           <div class="bg-darkcard border border-darkborder hover:border-brand-500/40 transition-all rounded-2xl p-4 space-y-3 shadow-lg flex flex-col justify-between group">

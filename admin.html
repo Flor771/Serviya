@@ -391,18 +391,39 @@
         const API_BASE = '/api/v1';
         let authToken = localStorage.getItem('admin_token') || '';
 
-        // DOM LOAD
-        document.addEventListener('DOMContentLoaded', () => {
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function initAdmin() {
+            authToken = localStorage.getItem('admin_token') || '';
             if (authToken) {
                 verifyTokenAndLoad();
             } else {
                 showLogin();
             }
 
-            document.getElementById('loginForm').addEventListener('submit', handleLogin);
-            document.getElementById('commissionForm').addEventListener('submit', handleUpdateCommission);
-            document.getElementById('createAdminForm').addEventListener('submit', handleCreateAdmin);
-        });
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) loginForm.addEventListener('submit', handleLogin);
+
+            const commissionForm = document.getElementById('commissionForm');
+            if (commissionForm) commissionForm.addEventListener('submit', handleUpdateCommission);
+
+            const createAdminForm = document.getElementById('createAdminForm');
+            if (createAdminForm) createAdminForm.addEventListener('submit', handleCreateAdmin);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAdmin);
+        } else {
+            initAdmin();
+        }
 
         function showLogin() {
             document.getElementById('loginSection').classList.remove('hidden');
@@ -424,19 +445,16 @@
             errDiv.classList.add('hidden');
 
             try {
-                const formData = new URLSearchParams();
-                formData.append('username', email);
-                formData.append('password', password);
-
                 const res = await fetch(`${API_BASE}/auth/login`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: formData
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
                 });
 
                 if (!res.ok) {
-                    const data = await res.json();
-                    throw new Error(data.detail || 'Credenciales inválidas');
+                    const data = await res.json().catch(() => ({}));
+                    const msg = Array.isArray(data.detail) ? data.detail.map(d => d.msg).join(', ') : (data.detail || 'Credenciales inválidas');
+                    throw new Error(msg);
                 }
 
                 const data = await res.json();
@@ -476,7 +494,8 @@
             }
             if (!res.ok) {
                 const err = await res.json().catch(() => ({ detail: 'Error en la solicitud' }));
-                throw new Error(err.detail || 'Error en la API');
+                const detailMsg = Array.isArray(err.detail) ? err.detail.map(d => d.msg).join(', ') : (err.detail || 'Error en la API');
+                throw new Error(detailMsg);
             }
             return res.json();
         }
@@ -503,7 +522,9 @@
                 el.classList.remove('bg-emerald-600/20', 'text-emerald-400', 'border', 'border-emerald-500/30');
             });
 
-            document.getElementById(`tab-${tabId}-content`).classList.remove('hidden');
+            const content = document.getElementById(`tab-${tabId}-content`);
+            if (content) content.classList.remove('hidden');
+            
             const activeNav = document.getElementById(`nav-${tabId}`);
             if (activeNav) {
                 activeNav.classList.add('bg-emerald-600/20', 'text-emerald-400', 'border', 'border-emerald-500/30');
@@ -523,8 +544,8 @@
         // VERIFICATIONS
         async function loadVerifications() {
             try {
-                const list = await apiFetch('/admin/verifications');
-                const pending = list.filter(v => v.status === 'pendiente');
+                const list = await apiFetch('/verificaciones/pendientes');
+                const pending = list.filter(v => v.verification_status === 'pendiente' || !v.is_verified);
                 
                 const badge = document.getElementById('badge-verifications');
                 badge.textContent = pending.length;
@@ -533,7 +554,7 @@
 
                 const container = document.getElementById('verificationsList');
                 if (list.length === 0) {
-                    container.innerHTML = `<p class="text-slate-500 text-sm italic">No hay solicitudes de verificación.</p>`;
+                    container.innerHTML = `<p class="text-slate-500 text-sm italic">No hay solicitudes de verificación pendientes.</p>`;
                     return;
                 }
 
@@ -541,14 +562,13 @@
                     <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
                             <div class="flex items-center space-x-2 mb-1">
-                                <h4 class="font-bold text-white text-base">${v.full_name}</h4>
-                                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${v.status === 'aprobado' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : v.status === 'rechazado' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">${v.status}</span>
+                                <h4 class="font-bold text-white text-base">${escapeHtml(v.full_name)}</h4>
+                                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${v.verification_status === 'aprobado' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : v.verification_status === 'rechazado' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">${v.verification_status || 'pendiente'}</span>
                             </div>
-                            <p class="text-xs text-slate-400">Especialidad: <span class="text-slate-200 font-medium">${v.specialty}</span> | Cédula: <span class="text-slate-200 font-medium">${v.id_number}</span></p>
-                            <p class="text-xs text-slate-400 mt-1">Ubicación: ${v.province}, ${v.municipality}</p>
-                            ${v.document_url ? `<a href="${v.document_url}" target="_blank" class="inline-flex items-center space-x-1 text-xs text-emerald-400 hover:underline mt-2"><i class="fa-solid fa-file-pdf"></i><span>Ver Documento Adjunto</span></a>` : ''}
+                            <p class="text-xs text-slate-400">Especialidad: <span class="text-slate-200 font-medium">${escapeHtml(v.infotep_course_name || 'Técnico General')}</span> | Cédula: <span class="text-slate-200 font-medium">${escapeHtml(v.id_card_number || 'N/A')}</span></p>
+                            <p class="text-xs text-slate-400 mt-1">Ubicación: ${escapeHtml(v.province || '')}, ${escapeHtml(v.municipality || '')}</p>
                         </div>
-                        ${v.status === 'pendiente' ? `
+                        ${v.verification_status === 'pendiente' || !v.is_verified ? `
                             <div class="flex items-center space-x-2 w-full md:w-auto">
                                 <button onclick="approveVerification('${v.id}')" class="flex-1 md:flex-initial bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-xl text-xs transition-colors">Aprobar</button>
                                 <button onclick="rejectVerification('${v.id}')" class="flex-1 md:flex-initial bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 px-4 py-2 rounded-xl text-xs transition-colors">Rechazar</button>
@@ -562,17 +582,17 @@
         }
 
         async function approveVerification(id) {
-            if (!confirm('¿Aprobar esta verificación técnico?')) return;
-            await apiFetch(`/admin/verifications/${id}/approve`, { method: 'PUT' });
+            if (!confirm('¿Aprobar esta verificación de técnico?')) return;
+            await apiFetch(`/verificaciones/${id}/aprobar`, { method: 'POST' });
             loadVerifications();
         }
 
         async function rejectVerification(id) {
             const reason = prompt('Motivo del rechazo:');
             if (!reason) return;
-            await apiFetch(`/admin/verifications/${id}/reject`, {
-                method: 'PUT',
-                body: JSON.stringify({ rejection_reason: reason })
+            await apiFetch(`/verificaciones/${id}/rechazar`, {
+                method: 'POST',
+                body: JSON.stringify({ motivo: reason })
             });
             loadVerifications();
         }
@@ -580,8 +600,8 @@
         // PAYMENTS
         async function loadPayments() {
             try {
-                const list = await apiFetch('/admin/payments');
-                const pending = list.filter(p => p.status === 'comprobante_subido');
+                const list = await apiFetch('/admin/pagos');
+                const pending = list.filter(p => p.status === 'comprobante_subido' || p.status === 'en_revision');
 
                 const badge = document.getElementById('badge-payments');
                 badge.textContent = pending.length;
@@ -597,13 +617,13 @@
                     <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
                             <div class="flex items-center space-x-2 mb-1">
-                                <span class="font-bold text-white text-base">RD$ ${p.amount_rd.toLocaleString()}</span>
-                                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${p.status === 'verificado' ? 'bg-emerald-500/20 text-emerald-400' : p.status === 'comprobante_subido' ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-700 text-slate-300'}">${p.status}</span>
+                                <span class="font-bold text-white text-base">RD$ ${Number(p.total_amount_rd || 0).toLocaleString()}</span>
+                                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${p.status === 'confirmado' || p.status === 'liberado' ? 'bg-emerald-500/20 text-emerald-400' : p.status === 'comprobante_subido' ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-700 text-slate-300'}">${p.status}</span>
                             </div>
-                            <p class="text-xs text-slate-400">Referencia: <span class="font-mono text-slate-200">${p.transfer_reference || 'N/A'}</span></p>
-                            ${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank" class="inline-flex items-center space-x-1 text-xs text-emerald-400 hover:underline mt-2"><i class="fa-solid fa-receipt"></i><span>Ver Comprobante Depósito</span></a>` : ''}
+                            <p class="text-xs text-slate-400">Referencia: <span class="font-mono text-slate-200">${escapeHtml(p.transfer_reference || 'N/A')}</span></p>
+                            ${p.receipt_url ? `<a href="${escapeHtml(p.receipt_url)}" target="_blank" class="inline-flex items-center space-x-1 text-xs text-emerald-400 hover:underline mt-2"><i class="fa-solid fa-receipt"></i><span>Ver Comprobante Depósito</span></a>` : ''}
                         </div>
-                        ${p.status === 'comprobante_subido' ? `
+                        ${p.status === 'comprobante_subido' || p.status === 'en_revision' ? `
                             <div class="flex items-center space-x-2">
                                 <button onclick="verifyPayment('${p.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-xl text-xs transition-colors">Validar Pago</button>
                             </div>
@@ -617,7 +637,7 @@
 
         async function verifyPayment(id) {
             if (!confirm('¿Confirmar que el depósito bancario fue recibido en la cuenta de ServiYa?')) return;
-            await apiFetch(`/admin/payments/${id}/verify`, { method: 'PUT' });
+            await apiFetch(`/admin/pagos/${id}/confirmar`, { method: 'POST' });
             loadPayments();
         }
 

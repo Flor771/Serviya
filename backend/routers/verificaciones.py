@@ -13,7 +13,7 @@ router = APIRouter(prefix="/verificaciones", tags=["Verificación de Técnicos"]
 @router.post("/solicitar", response_model=UserResponse)
 def submit_verification(
     request: VerificationSubmitRequest,
-    current_user: User = Depends(require_role(["trabajador", "admin"])),
+    current_user: User = Depends(require_role(["trabajador", "cliente", "admin"])),
     db: Session = Depends(get_db)
 ):
     cedula_clean = request.id_card_number.strip()
@@ -23,6 +23,9 @@ def submit_verification(
             detail="Por favor ingresa un número de Cédula Dominicana válido (11 dígitos)."
         )
         
+    if current_user.role == "cliente":
+        current_user.role = "trabajador"
+
     current_user.id_card_number = cedula_clean
     current_user.infotep_course_name = request.infotep_course_name or ""
     current_user.infotep_doc_url = request.infotep_doc_url or ""
