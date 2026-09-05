@@ -8,7 +8,10 @@ from backend.routers import (
 )
 
 # Initialize database tables
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Warning: Error creating DB tables on startup: {e}")
 
 app = FastAPI(
     title=settings.APP_NAME,

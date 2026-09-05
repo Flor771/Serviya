@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL", 
-        "postgresql://chamba_user:chamba_pass@localhost:5432/chambard"
+        "sqlite:///./serviya.db"
     )
     SECRET_KEY: str = os.getenv("SECRET_KEY", "chamba_rd_super_secret_jwt_key_dominicana_2026")
     ALGORITHM: str = "HS256"
