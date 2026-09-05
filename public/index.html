@@ -1,644 +1,1683 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ServiYa.do 🇩🇴</title>
-<!-- PWA Configuration -->
-<link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#00ff88">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ServiYa.do 🇩🇴">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,sans-serif;background:#0a0a0a;color:#fff;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px 10px}
-.container{background:#1a1a1a;padding:30px 25px;border-radius:20px;width:100%;max-width:480px;box-shadow:0 0 25px rgba(0,255,136,.15);border:1px solid #282828}
-.header{text-align:center;margin-bottom:20px}
-h2{color:#00ff88;font-size:26px;letter-spacing:1px;margin-bottom:4px}
-.tagline{color:#888;font-size:13px}
-.user-badge{background:#112a1f;border:1px solid #00ff88;color:#00ff88;padding:6px 12px;border-radius:20px;font-size:12px;display:inline-block;margin-top:8px}
-input, textarea, select{width:100%;padding:12px 14px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#222;color:#fff;font-size:15px;font-family:inherit}
-textarea{resize:vertical;min-height:70px}
-input:focus, textarea:focus, select:focus{outline:none;border-color:#00ff88;box-shadow:0 0 8px rgba(0,255,136,.25)}
-button{width:100%;padding:13px;background:#00ff88;color:#000;border:none;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:10px;font-size:15px;transition:all .2s ease}
-button:hover{opacity:.9;transform:translateY(-1px)}
-button.secondary{background:#222;color:#00ff88;border:1px solid #00ff88;margin-top:8px}
-button.danger{background:#ff4d4d;color:#fff}
-#mensaje{text-align:center;margin-top:12px;font-weight:bold;font-size:14px;min-height:20px}
-.section-title{color:#00ff88;font-size:16px;margin:18px 0 10px 0;font-weight:bold;display:flex;align-items:center;justify-content:space-between}
-.chamba-card{background:#222;border:1px solid #333;border-radius:12px;padding:14px;margin-bottom:12px}
-.chamba-card h4{color:#fff;font-size:16px;margin-bottom:4px}
-.chamba-card p{color:#aaa;font-size:13px;margin-bottom:8px;line-height:1.4}
-.chamba-meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#888;border-top:1px solid #2e2e2e;padding-top:8px}
-.chamba-price{color:#00ff88;font-weight:bold;font-size:14px}
-.btn-whatsapp{background:#25D366!important;color:#fff!important;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:bold;margin-top:8px;width:100%;text-align:center;box-sizing:border-box}
-.btn-whatsapp:hover{background:#20bd5a!important}
-.badge{background:#00ff88;color:#000;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:bold}
-.hidden{display:none}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ServiYa.do 🇩🇴 | Marketplace de Servicios y Trabajos en Rep. Dom.</title>
+  
+  <!-- PWA Metadata -->
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#10B981">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ServiYa.do 🇩🇴">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  
+  <!-- Tailwind CSS & FontAwesome Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              900: '#064e3b',
+            },
+            darkbg: '#0F172A',
+            darkcard: '#1E293B',
+            darkborder: '#334155'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0F172A;
+      color: #F8FAFC;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-none {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .badge-glow {
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.35);
+    }
+    .modal-backdrop {
+      background-color: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(6px);
+    }
+  </style>
 </head>
-<body>
-<div class="container">
-  <div class="header">
-    <h2>ServiYa.do 🇩🇴</h2>
-    <div class="tagline">TRABAJO • SERVICIOS • OPORTUNIDADES 🇩🇴</div>
-    <div id="userBadge" class="user-badge hidden"></div>
-  </div>
+<body class="bg-darkbg text-slate-100 min-h-screen pb-24 md:pb-8">
 
-  <!-- SECCIÓN 1: LOGIN / REGISTRO -->
-  <div id="authSection">
-    <input type="email" id="email" placeholder="Correo electrónico">
-    <input type="password" id="password" placeholder="Contraseña (mínimo 6 caracteres)">
-    <button id="btnRegister">Registrar Cuenta</button>
-    <button id="btnLogin" class="secondary">Iniciar Sesión</button>
-  </div>
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#" onclick="switchTab('tab-home'); return false;" class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-brand-500/20">
+          S
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-extrabold text-xl tracking-tight text-white">ServiYa<span class="text-brand-400">.do</span></span>
+            <span class="text-base">🇩🇴</span>
+          </div>
+          <p class="text-[10px] text-slate-400 font-medium tracking-wide">Trabajo • Servicios • Oportunidades</p>
+        </div>
+      </a>
 
-  <!-- SECCIÓN 2: PANEL DE USUARIO (PERFIL Y PUBLICAR) -->
-  <div id="userPanelSection" class="hidden">
-    <div class="section-title">
-      <span>⚙️ Mi Cuenta</span>
-      <button id="btnLogout" style="width:auto;padding:4px 10px;font-size:11px;margin:0" class="secondary">Cerrar Sesión</button>
+      <!-- Header Action Buttons -->
+      <div class="flex items-center gap-2">
+        <!-- Admin Link (Only for admins) -->
+        <a id="navAdminBtn" href="/admin" class="hidden text-xs bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2.5 py-1.5 rounded-lg font-semibold hover:bg-amber-500/20 transition flex items-center gap-1">
+          <i class="fa-solid fa-user-shield"></i> <span class="hidden sm:inline">Admin</span>
+        </a>
+
+        <!-- Notification Bell -->
+        <button id="notifBellBtn" onclick="openNotificationsModal()" class="relative p-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition">
+          <i class="fa-solid fa-bell text-lg"></i>
+          <span id="notifBadge" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-slate-900">0</span>
+        </button>
+
+        <!-- User Profile Avatar Pill / Login Button -->
+        <div id="headerAuthContainer">
+          <button onclick="openAuthModal()" class="bg-brand-500 text-slate-950 font-bold text-xs px-3.5 py-2 rounded-xl shadow-lg shadow-brand-500/20 hover:bg-brand-400 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER FOR TABS -->
+  <main class="max-w-5xl mx-auto px-4 py-4">
+
+    <!-- STATUS ALERT / TOAST -->
+    <div id="globalToast" class="hidden mb-4 p-3.5 rounded-xl text-sm font-medium border transition-all flex items-center justify-between">
+      <span id="toastText"></span>
+      <button onclick="hideToast()" class="text-slate-400 hover:text-white ml-2"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
-    <!-- Encabezado de Perfil de Usuario con Avatar -->
-    <div id="userProfileHeader" style="display:flex; align-items:center; gap: 12px; margin-bottom: 16px; padding: 12px; background: #222; border-radius: 12px; border: 1px solid #333;">
-       <div id="profileAvatar" style="width:48px; height:48px; border-radius:50%; background:#00ff88; color:#000; display:flex; justify-content:center; align-items:center; font-size:24px; font-weight:bold; text-transform:uppercase;">
-          ?
-       </div>
-       <div>
-         <div id="profileGreeting" style="color:#fff; font-size:16px; font-weight:bold;">¡Hola!</div>
-         <div id="profileEmail" style="color:#888; font-size:12px;"></div>
-       </div>
-    </div>
-
-    <!-- Pestañas de navegación de usuario -->
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <button id="tabPerfilBtn" style="margin-top:0;padding:8px 12px;font-size:13px;flex:1;background:#00ff88;color:#000;">👤 Mi Perfil</button>
-      <button id="tabPublicarBtn" class="secondary" style="margin-top:0;padding:8px 12px;font-size:13px;flex:1;">📢 Publicar Chamba</button>
-    </div>
-
-    <!-- FORMULARIO DE PERFIL DE USUARIO -->
-    <div id="profileFormContainer" style="background:#222;border:1px solid #333;border-radius:12px;padding:16px;margin-bottom:14px;">
-      <h3 style="color:#00ff88;font-size:16px;margin-bottom:8px">📝 Completa o Actualiza tu Perfil</h3>
-      <p style="color:#aaa;font-size:12px;margin-bottom:12px">Estos datos se guardarán en tu documento de Firestore (colección <b>users</b>).</p>
+    <!-- ==================== TAB 1: INICIO (HOME / FEED) ==================== -->
+    <section id="tab-home" class="tab-content space-y-5">
       
-      <label style="font-size:12px;color:#aaa">Nombre Completo</label>
-      <input type="text" id="perfilNombre" placeholder="Ej: Carlos Ramírez">
-      
-      <label style="font-size:12px;color:#aaa">Número de Teléfono / WhatsApp</label>
-      <input type="tel" id="perfilTelefono" placeholder="Ej: 809-555-0199">
-      
-      <label style="font-size:12px;color:#aaa">Rol en la plataforma</label>
-      <select id="perfilRol">
-        <option value="admin">👑 Administrador (Control total)</option>
-        <option value="cliente">👤 Cliente (Busco contratar servicios)</option>
-        <option value="chambeador">🛠️ Chambeador (Ofrezco servicios / Oficios)</option>
-      </select>
+      <!-- HERO BANNER -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-900 border border-brand-500/30 p-5 shadow-2xl">
+        <div class="relative z-10 space-y-2">
+          <div class="inline-flex items-center gap-2 bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-bold px-3 py-1 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+            Plataforma 100% Dominicana 🇩🇴
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Encuentra o publica <span class="text-brand-400">servicios profesionales</span> en Rep. Dom.
+          </h1>
+          <p class="text-slate-300 text-xs sm:text-sm max-w-xl">
+            Desde plomería y electricidad hasta tecnología y pintura. Pagos seguros en custodia y técnicos verificados.
+          </p>
+        </div>
+        <div class="absolute -right-8 -bottom-8 opacity-10 text-brand-400 text-9xl pointer-events-none">
+          <i class="fa-solid fa-handshake"></i>
+        </div>
+      </div>
 
-      <label style="font-size:12px;color:#aaa">Ciudad / Sector</label>
-      <input type="text" id="perfilUbicacion" placeholder="Ej: Santo Domingo Este">
+      <!-- SEARCH & PROVINCE QUICK FILTER BAR -->
+      <div class="bg-darkcard border border-darkborder p-3.5 rounded-2xl space-y-3 shadow-lg">
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <!-- Search input -->
+          <div class="relative flex-1">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+            <input type="text" id="searchInput" oninput="filterChambas()" placeholder="Buscar trabajo (ej: Pintor, Electricista, Plomero...)"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+          </div>
 
-      <button id="btnActualizarPerfil">💾 Guardar / Actualizar Perfil</button>
-    </div>
-
-    <!-- FORMULARIO DE PUBLICAR CHAMBA -->
-    <div id="publishFormContainer" class="hidden" style="background:#222;border:1px solid #333;border-radius:12px;padding:16px;margin-bottom:14px;">
-      <h3 style="color:#00ff88;font-size:16px;margin-bottom:12px">📢 Publicar Nueva Chamba</h3>
-      
-      <input type="text" id="chambaTitulo" placeholder="Título (ej: Pintar sala y habitación)">
-      <select id="chambaCategoria">
-        <option value="Hogar / Pintura">🏠 Hogar / Pintura</option>
-        <option value="Hogar / Electricidad">⚡ Hogar / Electricidad</option>
-        <option value="Hogar / Plomería">🔧 Hogar / Plomería</option>
-        <option value="Construcción / Albañilería">🧱 Construcción / Albañilería</option>
-        <option value="Mecánica Automotriz">🚗 Mecánica Automotriz</option>
-        <option value="Transporte / Mudanzas">📦 Transporte / Mudanzas</option>
-        <option value="Tecnología / Redes">💻 Tecnología / Redes</option>
-        <option value="Otros Servicios">🛠️ Otros Servicios</option>
-      </select>
-      <select id="chambaUbicacionSelect" style="margin-bottom:8px;" onchange="if(this.value!=='') document.getElementById('chambaUbicacion').value=this.value">
-        <option value="">-- Seleccionar Zona Rápida (RD) --</option>
-        <option value="Piantini, Distrito Nacional">Piantini, Distrito Nacional</option>
-        <option value="Naco, Distrito Nacional">Naco, Distrito Nacional</option>
-        <option value="Bella Vista, Distrito Nacional">Bella Vista, Distrito Nacional</option>
-        <option value="Gazcue, Distrito Nacional">Gazcue, Distrito Nacional</option>
-        <option value="Alma Rosa, Santo Domingo Este">Alma Rosa, Santo Domingo Este</option>
-        <option value="Los Mina, Santo Domingo Este">Los Mina, Santo Domingo Este</option>
-        <option value="Villa Mella, Santo Domingo Norte">Villa Mella, Santo Domingo Norte</option>
-        <option value="Herrera, Santo Domingo Oeste">Herrera, Santo Domingo Oeste</option>
-        <option value="Santiago de los Caballeros">Santiago de los Caballeros</option>
-        <option value="La Vega">La Vega</option>
-        <option value="San Cristóbal">San Cristóbal</option>
-        <option value="Puerto Plata">Puerto Plata</option>
-        <option value="Higüey / Punta Cana">Higüey / Punta Cana</option>
-        <option value="La Romana">La Romana</option>
-        <option value="San Pedro de Macorís">San Pedro de Macorís</option>
-        <option value="San Francisco de Macorís">San Francisco de Macorís</option>
-        <option value="Baní">Baní</option>
-        <option value="Bonao">Bonao</option>
-        <option value="Azua">Azua</option>
-        <option value="Barahona">Barahona</option>
-      </select>
-      <input type="text" id="chambaUbicacion" placeholder="O escribe la ubicación personalizada">
-      <input type="number" id="chambaPrecio" placeholder="Presupuesto a pagar en RD$ (ej: 3500)">
-      <textarea id="chambaDescripcion" placeholder="Describe los detalles del trabajo, herramientas requeridas o materiales..."></textarea>
-      
-      <button id="btnPublicarChamba">🚀 Publicar Chamba en Firestore</button>
-    </div>
-  </div>
-
-  <!-- MENSAJE DE ESTADO -->
-  <div id="mensaje"></div>
-
-  <!-- SECCIÓN 3: LISTADO DE CHAMBAS EN TIEMPO REAL -->
-  <div id="listSection" style="margin-top:20px;">
-    <div class="section-title">
-      <span>📋 Chamba Feed en Vivo</span>
-      <span id="chambaCount" style="font-size:12px;color:#888">0 publicaciones</span>
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:12px">
-      <select id="filtroProvinciaWeb" style="padding:8px 12px;font-size:13px;border-radius:8px;background:#1e1e1e;border:1px solid #333;color:#fff;flex:1">
-        <option value="Todas">📍 Todas las Provincias (Rep. Dom.)</option>
-        <option value="Distrito Nacional">📍 Distrito Nacional</option>
-        <option value="Santo Domingo Este">📍 Santo Domingo Este</option>
-        <option value="Santo Domingo Norte">📍 Santo Domingo Norte</option>
-        <option value="Santo Domingo Oeste">📍 Santo Domingo Oeste</option>
-        <option value="Santiago">📍 Santiago</option>
-        <option value="La Vega">📍 La Vega</option>
-        <option value="San Cristóbal">📍 San Cristóbal</option>
-        <option value="Puerto Plata">📍 Puerto Plata</option>
-        <option value="Higüey">📍 Higüey / Punta Cana</option>
-        <option value="La Romana">📍 La Romana</option>
-        <option value="San Pedro de Macorís">📍 San Pedro de Macorís</option>
-        <option value="San Francisco de Macorís">📍 San Francisco de Macorís</option>
-        <option value="Baní">📍 Baní</option>
-        <option value="Bonao">📍 Bonao</option>
-        <option value="Azua">📍 Azua</option>
-        <option value="Barahona">📍 Barahona</option>
-      </select>
-    </div>
-    <div id="chambasContainer">
-      <p style="text-align:center;color:#666;font-size:13px;padding:15px">Cargando publicaciones desde Firestore...</p>
-    </div>
-  </div>
-</div>
-
-<!-- Firebase SDKs Oficiales para Web -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { 
-    getAuth, 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged 
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { 
-    getFirestore, 
-    doc, 
-    setDoc, 
-    getDoc,
-    deleteDoc,
-    collection,
-    addDoc,
-    query,
-    orderBy,
-    onSnapshot,
-    serverTimestamp 
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-  // Configuración oficial de Firebase Web proporcionada
-  const firebaseConfig = {
-    apiKey: "AIzaSyAt8iuuZe4_xNbRiOMRaSt0MxS7xNI67j8",
-    authDomain: "chamba-rd-cef51.firebaseapp.com",
-    projectId: "chamba-rd-cef51",
-    storageBucket: "chamba-rd-cef51.firebasestorage.app",
-    messagingSenderId: "982367861690",
-    appId: "1:982367861690:web:74861ced8515eadbc13b83",
-    measurementId: "G-K292XGLBHC"
-  };
-
-  // Inicializar Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  // Elementos DOM
-  const authSection = document.getElementById("authSection");
-  const userPanelSection = document.getElementById("userPanelSection");
-  const userBadge = document.getElementById("userBadge");
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
-  const btnRegister = document.getElementById("btnRegister");
-  const btnLogin = document.getElementById("btnLogin");
-  const btnLogout = document.getElementById("btnLogout");
-  const mensajeDiv = document.getElementById("mensaje");
-
-  // Tabs
-  const tabPerfilBtn = document.getElementById("tabPerfilBtn");
-  const tabPublicarBtn = document.getElementById("tabPublicarBtn");
-  const profileFormContainer = document.getElementById("profileFormContainer");
-  const publishFormContainer = document.getElementById("publishFormContainer");
-
-  // Formulario Perfil
-  const perfilNombre = document.getElementById("perfilNombre");
-  const perfilTelefono = document.getElementById("perfilTelefono");
-  const perfilRol = document.getElementById("perfilRol");
-  const perfilUbicacion = document.getElementById("perfilUbicacion");
-  const btnActualizarPerfil = document.getElementById("btnActualizarPerfil");
-
-  // Formulario Chamba
-  const chambaTitulo = document.getElementById("chambaTitulo");
-  const chambaCategoria = document.getElementById("chambaCategoria");
-  const chambaUbicacion = document.getElementById("chambaUbicacion");
-  const chambaPrecio = document.getElementById("chambaPrecio");
-  const chambaDescripcion = document.getElementById("chambaDescripcion");
-  const btnPublicarChamba = document.getElementById("btnPublicarChamba");
-  const chambasContainer = document.getElementById("chambasContainer");
-  const chambaCount = document.getElementById("chambaCount");
-
-  let currentUser = null;
-  let currentUserData = null;
-
-  function mostrarMensaje(texto, esError = false) {
-    mensajeDiv.style.color = esError ? "#ff4d4d" : "#00ff88";
-    mensajeDiv.textContent = texto;
-  }
-
-  // Manejador de Tabs (Perfil vs Publicar)
-  tabPerfilBtn.addEventListener("click", () => {
-    profileFormContainer.classList.remove("hidden");
-    publishFormContainer.classList.add("hidden");
-    tabPerfilBtn.style.background = "#00ff88";
-    tabPerfilBtn.style.color = "#000";
-    tabPublicarBtn.style.background = "#222";
-    tabPublicarBtn.style.color = "#00ff88";
-  });
-
-  tabPublicarBtn.addEventListener("click", () => {
-    publishFormContainer.classList.remove("hidden");
-    profileFormContainer.classList.add("hidden");
-    tabPublicarBtn.style.background = "#00ff88";
-    tabPublicarBtn.style.color = "#000";
-    tabPerfilBtn.style.background = "#222";
-    tabPerfilBtn.style.color = "#00ff88";
-  });
-
-  // Cargar datos de perfil del usuario desde Firestore
-  // Helper to update avatar
-  function updateAvatarUI(nombre, email) {
-    const avatarEl = document.getElementById("profileAvatar");
-    const greetingEl = document.getElementById("profileGreeting");
-    const emailEl = document.getElementById("profileEmail");
-    
-    if (avatarEl) {
-       let initial = '?';
-       if (nombre && nombre.trim().length > 0) {
-           initial = nombre.trim().charAt(0).toUpperCase();
-       } else if (email && email.trim().length > 0) {
-           initial = email.trim().charAt(0).toUpperCase();
-       }
-       avatarEl.textContent = initial;
-    }
-    
-    if (greetingEl) {
-       greetingEl.textContent = nombre && nombre.trim() !== "" ? `¡Hola, ${nombre.split(' ')[0]}!` : "¡Hola!";
-    }
-    
-    if (emailEl) {
-       emailEl.textContent = email || "";
-    }
-  }
-
-  async function cargarPerfilUsuario(uid, userEmail) {
-    try {
-      const userRef = doc(db, "users", uid);
-      const docSnap = await getDoc(userRef);
-      if (docSnap.exists()) {
-        currentUserData = docSnap.data();
-        perfilNombre.value = currentUserData.nombre || "";
-        perfilTelefono.value = currentUserData.telefono || "";
-        if (currentUserData.rol) perfilRol.value = currentUserData.rol;
-        if (currentUserData.ubicacion) perfilUbicacion.value = currentUserData.ubicacion;
-
-        const rolIcon = currentUserData.rol === 'admin' ? '👑 ADMIN:' : '👤';
-        const displayName = currentUserData.nombre ? `${currentUserData.nombre} (${currentUserData.rol || 'cliente'})` : userEmail;
-        userBadge.textContent = `${rolIcon} ${displayName}`;
-        updateAvatarUI(currentUserData.nombre, userEmail);
-      } else {
-        currentUserData = { rol: 'cliente' };
-        userBadge.textContent = `Sesión: ${userEmail}`;
-        updateAvatarUI("", userEmail);
-      }
-    } catch (err) {
-      console.error("Error cargando perfil:", err);
-    }
-  }
-
-  // Escuchar estado de autenticación en tiempo real
-  onAuthStateChanged(auth, async (user) => {
-    currentUser = user;
-    if (user) {
-      authSection.classList.add("hidden");
-      userPanelSection.classList.remove("hidden");
-      userBadge.classList.remove("hidden");
-      userBadge.textContent = `Sesión: ${user.email}`;
-      updateAvatarUI("", user.email);
-      mostrarMensaje(`¡Bienvenido! Completa tu perfil para empezar.`);
-      await cargarPerfilUsuario(user.uid, user.email);
-    } else {
-      authSection.classList.remove("hidden");
-      userPanelSection.classList.add("hidden");
-      userBadge.classList.add("hidden");
-      mostrarMensaje("Inicia sesión o regístrate para publicar o ver tu perfil.");
-    }
-  });
-
-  // 1. REGISTRO EN FIREBASE AUTH + CREACIÓN DE DOCUMENTO EN FIRESTORE
-  btnRegister.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-
-    if (!email || !password) {
-      mostrarMensaje("Por favor ingresa correo y contraseña", true);
-      return;
-    }
-    if (password.length < 6) {
-      mostrarMensaje("La contraseña debe tener al menos 6 caracteres", true);
-      return;
-    }
-
-    try {
-      btnRegister.disabled = true;
-      mostrarMensaje("Registrando usuario...");
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      // Crear documento inicial en Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        email: user.email,
-        nombre: "",
-        telefono: "",
-        rol: "cliente",
-        creadoEn: serverTimestamp()
-      });
-
-      mostrarMensaje(`¡Cuenta creada con éxito! Completa tu nombre y teléfono a continuación.`);
-    } catch (error) {
-      console.error("Auth Error:", error);
-      if (error.code === 'auth/email-already-in-use') {
-        mostrarMensaje("Este correo ya está registrado.", true);
-      } else if (error.code === 'auth/operation-not-allowed') {
-        mostrarMensaje("Habilita Email/Password en Authentication > Sign-in method en Firebase Console.", true);
-      } else if (error.code === 'auth/invalid-email') {
-        mostrarMensaje("El correo no tiene un formato válido.", true);
-      } else {
-        mostrarMensaje(error.message, true);
-      }
-    } finally {
-      btnRegister.disabled = false;
-    }
-  });
-
-  // 2. ACTUALIZAR PERFIL EN FIRESTORE (Nombre, Teléfono, Rol, Ubicación)
-  btnActualizarPerfil.addEventListener("click", async () => {
-    if (!currentUser) {
-      mostrarMensaje("Debes iniciar sesión para actualizar tu perfil", true);
-      return;
-    }
-
-    const nombre = perfilNombre.value.trim();
-    const telefono = perfilTelefono.value.trim();
-    const rol = perfilRol.value;
-    const ubicacion = perfilUbicacion.value.trim();
-
-    if (!nombre) {
-      mostrarMensaje("Por favor escribe tu nombre completo", true);
-      return;
-    }
-
-    try {
-      btnActualizarPerfil.disabled = true;
-      mostrarMensaje("Guardando perfil en Firestore...");
-
-      const datosActualizados = {
-        uid: currentUser.uid,
-        email: currentUser.email,
-        nombre: nombre,
-        telefono: telefono || "",
-        rol: rol || "cliente",
-        ubicacion: ubicacion || "",
-        actualizadoEn: serverTimestamp()
-      };
-
-      // Actualizar / Guardar en el documento 'users/{uid}'
-      await setDoc(doc(db, "users", currentUser.uid), datosActualizados, { merge: true });
-
-      userBadge.textContent = `👤 ${nombre} (${rol})`;
-      updateAvatarUI(nombre, currentUser.email);
-      mostrarMensaje("¡Perfil guardado y actualizado en Firestore con éxito! 🎉");
-    } catch (error) {
-      console.error("Error al actualizar perfil en Firestore:", error);
-      mostrarMensaje(`Error en Firestore: ${error.message}`, true);
-    } finally {
-      btnActualizarPerfil.disabled = false;
-    }
-  });
-
-  // 2. LOGIN EN FIREBASE AUTH
-  btnLogin.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-
-    if (!email || !password) {
-      mostrarMensaje("Por favor ingresa correo y contraseña", true);
-      return;
-    }
-
-    try {
-      mostrarMensaje("Iniciando sesión...");
-      await signInWithEmailAndPassword(auth, email, password);
-      mostrarMensaje("¡Sesión iniciada!");
-    } catch (error) {
-      console.error("Login error:", error);
-      mostrarMensaje("Correo o contraseña incorrectos", true);
-    }
-  });
-
-  // 3. LOGOUT
-  btnLogout.addEventListener("click", async () => {
-    await signOut(auth);
-    mostrarMensaje("Sesión cerrada.");
-  });
-
-  // 4. CREAR Y PUBLICAR CHAMBA EN FIRESTORE (Colección 'chambas')
-  btnPublicarChamba.addEventListener("click", async () => {
-    if (!currentUser) {
-      mostrarMensaje("Debes iniciar sesión para publicar una chamba", true);
-      return;
-    }
-
-    const titulo = chambaTitulo.value.trim();
-    const categoria = chambaCategoria.value;
-    const ubicacion = chambaUbicacion.value.trim();
-    const precio = parseFloat(chambaPrecio.value) || 0;
-    const descripcion = chambaDescripcion.value.trim();
-
-    if (!titulo || !ubicacion || precio <= 0 || !descripcion) {
-      mostrarMensaje("Por favor completa todos los campos con un precio válido en RD$", true);
-      return;
-    }
-
-    try {
-      mostrarMensaje("Publicando chamba en Firestore...");
-      btnPublicarChamba.disabled = true;
-
-      const nuevaChamba = {
-        titulo: titulo,
-        categoriaNombre: categoria,
-        ubicacion: ubicacion,
-        precio: precio,
-        descripcion: descripcion,
-        clienteId: currentUser.uid,
-        clienteEmail: currentUser.email,
-        estado: "PUBLICADA",
-        fechaCreacion: serverTimestamp(),
-        createdAtMillis: Date.now()
-      };
-
-      // Guardar en la colección 'chambas' de Firestore
-      await addDoc(collection(db, "chambas"), nuevaChamba);
-
-      // Limpiar formulario
-      chambaTitulo.value = "";
-      chambaUbicacion.value = "";
-      chambaPrecio.value = "";
-      chambaDescripcion.value = "";
-
-      mostrarMensaje("¡Chamba publicada con éxito en Firestore! 🎉");
-    } catch (error) {
-      console.error("Error guardando chamba:", error);
-      mostrarMensaje(`Error al guardar en Firestore: ${error.message}`, true);
-    } finally {
-      btnPublicarChamba.disabled = false;
-    }
-  });
-
-  // 5. ESCUCHAR Y MOSTRAR PUBLICACIONES EN TIEMPO REAL DESDE FIRESTORE
-  const chambasQuery = query(collection(db, "chambas"));
-  const filtroProvinciaWeb = document.getElementById("filtroProvinciaWeb");
-  let currentChambasList = [];
-
-  function renderChambas(list) {
-    const filtro = filtroProvinciaWeb ? filtroProvinciaWeb.value : 'Todas';
-    const filtradas = list.filter(item => {
-      if (filtro === 'Todas') return true;
-      return (item.data.ubicacion || '').toLowerCase().includes(filtro.toLowerCase());
-    });
-
-    chambaCount.textContent = `${filtradas.length} de ${list.length} publicaciones`;
-
-    if (filtradas.length === 0) {
-      chambasContainer.innerHTML = `<p style="text-align:center;color:#777;font-size:13px;padding:15px">No se encontraron chambas en <b>${escapeHtml(filtro)}</b>. Prueba seleccionando otra provincia o publica una.</p>`;
-      return;
-    }
-
-    chambasContainer.innerHTML = '';
-
-    filtradas.forEach(({ id: docId, data }) => {
-      const card = document.createElement("div");
-      card.className = "chamba-card";
-      
-      const precioFormateado = "RD$" + Number(data.precio || 0).toLocaleString();
-      const esAdmin = currentUserData && currentUserData.rol === 'admin';
-      const esDueno = currentUser && currentUser.uid === data.clienteId;
-      
-      let adminControlsHtml = '';
-      if (esAdmin || esDueno) {
-        adminControlsHtml = `
-          <button class="btnEliminarChamba danger" data-id="${docId}" style="width:auto;padding:3px 8px;font-size:11px;margin:0 0 0 6px">🗑️ Eliminar</button>
-        `;
-      }
-
-      const whatsAppMsg = encodeURIComponent(`Hola! Vi tu publicación en ServiYa.do 🇩🇴: "${data.titulo || 'Chamba'}" (${precioFormateado}) y me gustaría cotizar/conversar.`);
-      const whatsAppLink = `https://wa.me/18095550199?text=${whatsAppMsg}`;
-
-      card.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
-          <h4>${escapeHtml(data.titulo || 'Sin título')}</h4>
-          <div style="display:flex;align-items:center">
-            <span class="badge">${escapeHtml(data.estado || 'PUBLICADA')}</span>
-            ${adminControlsHtml}
+          <!-- Province Selector -->
+          <div class="relative sm:w-56">
+            <i class="fa-solid fa-location-dot absolute left-3.5 top-3 text-brand-400 text-sm"></i>
+            <select id="provinceSelect" onchange="filterChambas()"
+                    class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-8 py-2 text-sm text-white focus:outline-none focus:border-brand-500 transition appearance-none cursor-pointer">
+              <option value="Todas">📍 Todas las Provincias</option>
+              <option value="Distrito Nacional">📍 Distrito Nacional</option>
+              <option value="Santo Domingo">📍 Santo Domingo (SDE, SDN, SDO)</option>
+              <option value="Santiago">📍 Santiago</option>
+              <option value="La Vega">📍 La Vega</option>
+              <option value="San Cristóbal">📍 San Cristóbal</option>
+              <option value="Puerto Plata">📍 Puerto Plata</option>
+              <option value="Higüey">📍 Higüey / Punta Cana</option>
+              <option value="La Romana">📍 La Romana</option>
+              <option value="San Pedro de Macorís">📍 San Pedro de Macorís</option>
+              <option value="San Francisco de Macorís">📍 San Francisco de Macorís</option>
+              <option value="Espaillat">📍 Moca / Espaillat</option>
+              <option value="Baní">📍 Peravia / Baní</option>
+              <option value="Bonao">📍 Monseñor Nouel / Bonao</option>
+              <option value="Barahona">📍 Barahona</option>
+              <option value="Azua">📍 Azua</option>
+            </select>
+            <i class="fa-solid fa-chevron-down absolute right-3 top-3.5 text-slate-400 text-xs pointer-events-none"></i>
           </div>
         </div>
-        <p style="color:#00ff88;font-size:12px;font-weight:bold;margin-bottom:4px">🏷️ ${escapeHtml(data.categoriaNombre || 'Servicio')}</p>
-        <p>${escapeHtml(data.descripcion || '')}</p>
-        <div class="chamba-meta">
-          <span>📍 ${escapeHtml(data.ubicacion || 'República Dominicana')} ${data.clienteEmail ? '• 👤 ' + escapeHtml(data.clienteEmail) : ''}</span>
-          <span class="chamba-price">${precioFormateado}</span>
-        </div>
-        <a href="${whatsAppLink}" target="_blank" class="btn-whatsapp">
-          💬 Contactar por WhatsApp
-        </a>
-      `;
 
-      const btnEliminar = card.querySelector(".btnEliminarChamba");
-      if (btnEliminar) {
-        btnEliminar.addEventListener("click", async (e) => {
-          e.stopPropagation();
-          const targetId = btnEliminar.getAttribute("data-id");
-          if (confirm("¿Estás seguro de eliminar esta publicación como Administrador?")) {
-            try {
-              await deleteDoc(doc(db, "chambas", targetId));
-              mostrarMensaje("Publicación eliminada de Firestore.");
-            } catch (err) {
-              mostrarMensaje(`Error al eliminar: ${err.message}`, true);
-            }
-          }
-        });
+        <!-- CATEGORIES SCROLLABLE PILLS -->
+        <div class="flex items-center gap-2 overflow-x-auto scrollbar-none pt-1 pb-1">
+          <button onclick="selectCategory('Todas')" class="cat-pill active-cat px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-brand-500 text-slate-950 transition">
+            🛠️ Todos
+          </button>
+          <button onclick="selectCategory('Hogar / Pintura')" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:text-white transition">
+            🏠 Pintura
+          </button>
+          <button onclick="selectCategory('Hogar / Electricidad')" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:text-white transition">
+            ⚡ Electricidad
+          </button>
+          <button onclick="selectCategory('Hogar / Plomería')" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:text-white transition">
+            🔧 Plomería
+          </button>
+          <button onclick="selectCategory('Construcción / Albañilería')" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:text-white transition">
+            🧱 Albañilería
+          </button>
+          <button onclick="selectCategory('Mecánica Automotriz')" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:text-white transition">
+            🚗 Mecánica
+          </button>
+          <button onclick="selectCategory('Transporte / Mudanzas')" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:text-white transition">
+            📦 Mudanzas
+          </button>
+          <button onclick="selectCategory('Tecnología / Redes')" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:text-white transition">
+            💻 Tecnología
+          </button>
+          <button onclick="selectCategory('Otros Servicios')" class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:text-white transition">
+            ✨ Otros
+          </button>
+        </div>
+      </div>
+
+      <!-- FEED SECTION TITLE & COUNTER -->
+      <div class="flex items-center justify-between">
+        <h2 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-fire text-brand-400"></i> Chambas y Publicaciones Disponibles
+        </h2>
+        <span id="chambaCounter" class="text-xs text-slate-400 bg-slate-800 px-2.5 py-1 rounded-full font-medium">Cargando...</span>
+      </div>
+
+      <!-- CHAMBAS GRID / FEED -->
+      <div id="chambasGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Skeleton Loading Placeholders -->
+        <div class="animate-pulse bg-darkcard p-4 rounded-2xl border border-darkborder space-y-3">
+          <div class="h-4 bg-slate-700 rounded w-3/4"></div>
+          <div class="h-3 bg-slate-800 rounded w-1/2"></div>
+          <div class="h-16 bg-slate-800 rounded"></div>
+        </div>
+        <div class="animate-pulse bg-darkcard p-4 rounded-2xl border border-darkborder space-y-3">
+          <div class="h-4 bg-slate-700 rounded w-3/4"></div>
+          <div class="h-3 bg-slate-800 rounded w-1/2"></div>
+          <div class="h-16 bg-slate-800 rounded"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB 2: BUSCAR & ESTIMADOR ==================== -->
+    <section id="tab-search" class="tab-content hidden space-y-5">
+      <div class="bg-darkcard border border-darkborder rounded-2xl p-5 space-y-4 shadow-xl">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-compass text-brand-400"></i> Explora por Categorías
+        </h2>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <button onclick="filterByCategoryFromSearch('Hogar / Pintura')" class="p-3.5 bg-slate-900 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/50 rounded-xl text-left transition group">
+            <div class="text-2xl mb-1 group-hover:scale-110 transition">🎨</div>
+            <div class="font-bold text-sm text-white">Pintura & Decoración</div>
+            <div class="text-[11px] text-slate-400">Salas, fachadas, interiores</div>
+          </button>
+          
+          <button onclick="filterByCategoryFromSearch('Hogar / Electricidad')" class="p-3.5 bg-slate-900 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/50 rounded-xl text-left transition group">
+            <div class="text-2xl mb-1 group-hover:scale-110 transition">⚡</div>
+            <div class="font-bold text-sm text-white">Electricidad</div>
+            <div class="text-[11px] text-slate-400">Averías, inversores, luces</div>
+          </button>
+
+          <button onclick="filterByCategoryFromSearch('Hogar / Plomería')" class="p-3.5 bg-slate-900 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/50 rounded-xl text-left transition group">
+            <div class="text-2xl mb-1 group-hover:scale-110 transition">🔧</div>
+            <div class="font-bold text-sm text-white">Plomería</div>
+            <div class="text-[11px] text-slate-400">Tubos, bombas, fugas</div>
+          </button>
+
+          <button onclick="filterByCategoryFromSearch('Construcción / Albañilería')" class="p-3.5 bg-slate-900 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/50 rounded-xl text-left transition group">
+            <div class="text-2xl mb-1 group-hover:scale-110 transition">🧱</div>
+            <div class="font-bold text-sm text-white">Albañilería</div>
+            <div class="text-[11px] text-slate-400">Pisos, paredes, reparaciones</div>
+          </button>
+
+          <button onclick="filterByCategoryFromSearch('Mecánica Automotriz')" class="p-3.5 bg-slate-900 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/50 rounded-xl text-left transition group">
+            <div class="text-2xl mb-1 group-hover:scale-110 transition">🚗</div>
+            <div class="font-bold text-sm text-white">Mecánica</div>
+            <div class="text-[11px] text-slate-400">Diagnósticos, aire, frenos</div>
+          </button>
+
+          <button onclick="filterByCategoryFromSearch('Transporte / Mudanzas')" class="p-3.5 bg-slate-900 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/50 rounded-xl text-left transition group">
+            <div class="text-2xl mb-1 group-hover:scale-110 transition">📦</div>
+            <div class="font-bold text-sm text-white">Mudanzas</div>
+            <div class="text-[11px] text-slate-400">Acarreos, carga de muebles</div>
+          </button>
+
+          <button onclick="filterByCategoryFromSearch('Tecnología / Redes')" class="p-3.5 bg-slate-900 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/50 rounded-xl text-left transition group">
+            <div class="text-2xl mb-1 group-hover:scale-110 transition">💻</div>
+            <div class="font-bold text-sm text-white">Tecnología</div>
+            <div class="text-[11px] text-slate-400">Wi-Fi, cámaras, PC</div>
+          </button>
+
+          <button onclick="filterByCategoryFromSearch('Otros Servicios')" class="p-3.5 bg-slate-900 hover:bg-brand-500/10 border border-slate-800 hover:border-brand-500/50 rounded-xl text-left transition group">
+            <div class="text-2xl mb-1 group-hover:scale-110 transition">✨</div>
+            <div class="font-bold text-sm text-white">Otros Oficios</div>
+            <div class="text-[11px] text-slate-400">Jardinería, limpieza, etc.</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- ESTIMADOR DE PRECIOS EN REP DOM -->
+      <div class="bg-darkcard border border-darkborder rounded-2xl p-5 space-y-4 shadow-xl">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-calculator text-brand-400"></i> Estimador de Costos Promedio (RD$)
+        </h2>
+        <p class="text-xs text-slate-400">Calcula el precio promedio recomendado para publicar tu servicio en República Dominicana.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-semibold text-slate-300">Tipo de Trabajo</label>
+            <select id="estimatorCategory" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-brand-500 outline-none">
+              <option value="Pintura de Habitación / Sala">🎨 Pintura de Habitación / Sala</option>
+              <option value="Instalación Inversor / Baterías">⚡ Instalación Inversor / Baterías</option>
+              <option value="Reparación Fuga de Agua / Tubería">🔧 Reparación Fuga de Agua</option>
+              <option value="Mantenimiento de Aire Acondicionado">❄️ Mantenimiento Aire Acondicionado</option>
+              <option value="Instalación de Cámaras de Seguridad">📹 Cámaras de Seguridad</option>
+              <option value="Mudanza Local en Ciudad">📦 Mudanza Local (Acarreo)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-xs font-semibold text-slate-300">Complejidad / Tamaño</label>
+            <select id="estimatorComplexity" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:border-brand-500 outline-none">
+              <option value="1.0">Sencillo / Trabajo Rápido</option>
+              <option value="1.4">Mediano / Estándar</option>
+              <option value="2.0">Complejo / Mayor Tiempo</option>
+            </select>
+          </div>
+        </div>
+
+        <button onclick="calculateEstimate()" class="w-full bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold py-2.5 rounded-xl transition text-sm">
+          🧮 Calcular Precio Estimado
+        </button>
+
+        <div id="estimatorResult" class="hidden p-3.5 bg-slate-900 rounded-xl border border-brand-500/30 text-center">
+          <span class="text-xs text-slate-400">Rango Estimado Recomendado:</span>
+          <div id="estimatorPriceText" class="text-xl font-extrabold text-brand-400 mt-0.5">RD$ 2,500 - RD$ 3,500</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: PUBLICAR CHAMBA ==================== -->
+    <section id="tab-publish" class="tab-content hidden space-y-5">
+      <div class="bg-darkcard border border-darkborder rounded-2xl p-5 space-y-4 shadow-xl max-w-2xl mx-auto">
+        <div class="border-b border-slate-800 pb-3">
+          <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+            <i class="fa-solid fa-circle-plus text-brand-400"></i> Publicar Nueva Chamba
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Describe el trabajo que necesitas y recibe propuestas de técnicos en minutos.</p>
+        </div>
+
+        <form id="publishForm" onsubmit="submitPublishForm(event)" class="space-y-4">
+          <!-- Titulo -->
+          <div>
+            <label class="text-xs font-bold text-slate-300">Título de la Publicación *</label>
+            <input type="text" id="pubTitle" required placeholder="Ej: Pintar sala y cocina (2 capas + resane)"
+                   class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-brand-500 outline-none">
+          </div>
+
+          <!-- Categoria -->
+          <div>
+            <label class="text-xs font-bold text-slate-300">Categoría del Servicio *</label>
+            <select id="pubCategory" required class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-brand-500 outline-none">
+              <option value="Hogar / Pintura">🏠 Hogar / Pintura</option>
+              <option value="Hogar / Electricidad">⚡ Hogar / Electricidad</option>
+              <option value="Hogar / Plomería">🔧 Hogar / Plomería</option>
+              <option value="Construcción / Albañilería">🧱 Construcción / Albañilería</option>
+              <option value="Mecánica Automotriz">🚗 Mecánica Automotriz</option>
+              <option value="Transporte / Mudanzas">📦 Transporte / Mudanzas</option>
+              <option value="Tecnología / Redes">💻 Tecnología / Redes</option>
+              <option value="Otros Servicios">✨ Otros Servicios</option>
+            </select>
+          </div>
+
+          <!-- Provincia y Municipio -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs font-bold text-slate-300">Provincia *</label>
+              <select id="pubProvince" required class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-brand-500 outline-none">
+                <option value="Distrito Nacional">Distrito Nacional</option>
+                <option value="Santo Domingo Este">Santo Domingo Este</option>
+                <option value="Santo Domingo Norte">Santo Domingo Norte</option>
+                <option value="Santo Domingo Oeste">Santo Domingo Oeste</option>
+                <option value="Santiago">Santiago</option>
+                <option value="La Vega">La Vega</option>
+                <option value="San Cristóbal">San Cristóbal</option>
+                <option value="Puerto Plata">Puerto Plata</option>
+                <option value="Higüey / Punta Cana">Higüey / Punta Cana</option>
+                <option value="La Romana">La Romana</option>
+                <option value="San Pedro de Macorís">San Pedro de Macorís</option>
+                <option value="San Francisco de Macorís">San Francisco de Macorís</option>
+                <option value="Baní">Baní</option>
+                <option value="Bonao">Bonao</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-xs font-bold text-slate-300">Sector / Municipio *</label>
+              <input type="text" id="pubMunicipality" required placeholder="Ej: Piantini, Bella Vista, Alma Rosa..."
+                     class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-brand-500 outline-none">
+            </div>
+          </div>
+
+          <!-- Presupuesto en RD$ -->
+          <div>
+            <label class="text-xs font-bold text-slate-300">Presupuesto Propuesto (RD$) *</label>
+            <div class="relative mt-1">
+              <span class="absolute left-3.5 top-2.5 text-brand-400 font-bold text-sm">RD$</span>
+              <input type="number" id="pubBudget" required min="100" step="100" placeholder="Ej: 3500"
+                     class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-12 pr-3 py-2.5 text-sm text-white font-bold focus:border-brand-500 outline-none">
+            </div>
+          </div>
+
+          <!-- Descripcion -->
+          <div>
+            <label class="text-xs font-bold text-slate-300">Descripción Detallada *</label>
+            <textarea id="pubDescription" required rows="3" placeholder="Describe exactamente lo que necesitas, si aportas los materiales o si el técnico debe llevarlos..."
+                      class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-brand-500 outline-none"></textarea>
+          </div>
+
+          <!-- Foto Opcional URL -->
+          <div>
+            <label class="text-xs font-bold text-slate-300">URL de Fotografía de Referencia (Opcional)</label>
+            <input type="url" id="pubPhotoUrl" placeholder="https://ejemplo.com/foto.jpg"
+                   class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-brand-500 outline-none">
+          </div>
+
+          <!-- Submit button -->
+          <button type="submit" id="btnSubmitChamba" class="w-full bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-slate-950 font-black py-3 rounded-xl transition text-base shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-paper-plane"></i> Publicar Chamba
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: MENSAJES & CHAT ==================== -->
+    <section id="tab-messages" class="tab-content hidden space-y-4">
+      <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow-xl max-w-3xl mx-auto">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2 mb-3">
+          <i class="fa-solid fa-comments text-brand-400"></i> Mensajería y Conversaciones
+        </h2>
+
+        <!-- Active Chat Container -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 min-h-[420px]">
+          <!-- Conversation list -->
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 space-y-2 max-h-96 overflow-y-auto">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Conversaciones</span>
+            <div id="conversationsList" class="space-y-1.5 text-xs text-slate-400 text-center py-8">
+              No tienes mensajes activos.
+            </div>
+          </div>
+
+          <!-- Chat Messages Area -->
+          <div class="md:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col justify-between">
+            <div id="chatHeader" class="border-b border-slate-800 pb-2 flex items-center justify-between">
+              <span id="chatTitle" class="font-bold text-sm text-white">Selecciona una conversación</span>
+              <span id="chatStatus" class="text-[11px] text-slate-400"></span>
+            </div>
+
+            <!-- Messages Log -->
+            <div id="chatMessagesLog" class="flex-1 my-3 overflow-y-auto space-y-2 p-2 max-h-64 scrollbar-none flex flex-col">
+              <div class="text-center text-xs text-slate-500 py-12">
+                <i class="fa-regular fa-comment-dots text-3xl mb-2 block"></i>
+                Haz clic en una conversación para ver los mensajes.
+              </div>
+            </div>
+
+            <!-- Message Input Form -->
+            <form id="chatInputForm" onsubmit="sendChatMessage(event)" class="flex gap-2 pt-2 border-t border-slate-800">
+              <input type="text" id="chatMessageInput" placeholder="Escribe un mensaje..." disabled
+                     class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+              <button type="submit" id="chatSendBtn" disabled
+                      class="bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold px-3.5 py-2 rounded-xl text-xs transition">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: MI CUENTA / PERFIL ==================== -->
+    <section id="tab-profile" class="tab-content hidden space-y-5">
+      
+      <!-- USER PROFILE HEADER CARD -->
+      <div id="profileHeaderCard" class="bg-darkcard border border-darkborder rounded-2xl p-5 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+          <!-- Avatar -->
+          <div id="userAvatarCircle" class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-400 text-slate-950 font-black text-3xl flex items-center justify-center shadow-lg shadow-brand-500/20">
+            ?
+          </div>
+
+          <!-- User Basic Info -->
+          <div class="flex-1 text-center sm:text-left space-y-1">
+            <div class="flex flex-col sm:flex-row items-center gap-2">
+              <h2 id="userNameText" class="text-xl font-extrabold text-white">Cargando...</h2>
+              <span id="userRoleBadge" class="bg-brand-500/10 text-brand-400 border border-brand-500/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase">
+                CLIENTE
+              </span>
+              <span id="userVerifiedBadge" class="hidden bg-sky-500/10 text-sky-400 border border-sky-500/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                <i class="fa-solid fa-circle-check"></i> Verificado
+              </span>
+            </div>
+
+            <p id="userEmailText" class="text-xs text-slate-400"></p>
+            <p id="userLocationText" class="text-xs text-slate-300 font-medium"><i class="fa-solid fa-location-dot text-brand-400"></i> República Dominicana</p>
+
+            <!-- Rating & Completed Jobs -->
+            <div class="flex items-center justify-center sm:justify-start gap-3 pt-2 text-xs">
+              <span class="text-amber-400 font-bold"><i class="fa-solid fa-star"></i> <span id="userRatingText">5.0</span> (5)</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-slate-300 font-semibold"><i class="fa-solid fa-briefcase text-brand-400"></i> <span id="userJobsText">0</span> trabajos</span>
+            </div>
+          </div>
+
+          <!-- Logout Button -->
+          <button onclick="logout()" class="text-xs bg-slate-800 hover:bg-rose-500/20 text-slate-300 hover:text-rose-400 border border-slate-700 px-3 py-2 rounded-xl transition">
+            <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+          </button>
+        </div>
+
+        <!-- PROFILE SUB-TABS NAVIGATION -->
+        <div class="flex items-center gap-2 border-t border-slate-800 pt-3 overflow-x-auto scrollbar-none">
+          <button onclick="switchProfileSubtab('subtab-mychambas')" id="btnSubtabMyChambas" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-500 text-slate-950 transition whitespace-nowrap">
+            📋 Mis Chambas / Trabajos
+          </button>
+          <button onclick="switchProfileSubtab('subtab-editprofile')" id="btnSubtabEditProfile" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:text-white transition whitespace-nowrap">
+            ✏️ Editar Perfil
+          </button>
+          <button onclick="switchProfileSubtab('subtab-verify')" id="btnSubtabVerify" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:text-white transition whitespace-nowrap">
+            🪪 Verificación Cédula / INFOTEP
+          </button>
+          <button onclick="switchProfileSubtab('subtab-bank')" id="btnSubtabBank" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:text-white transition whitespace-nowrap">
+            🏦 Cuenta Bancaria
+          </button>
+        </div>
+      </div>
+
+      <!-- PROFILE SUB-TAB 1: MIS CHAMBAS / MIS POSTULACIONES -->
+      <div id="subtab-mychambas" class="profile-subtab space-y-4">
+        <h3 class="text-base font-bold text-white">Historial de Publicaciones y Postulaciones</h3>
+        <div id="myChambasContainer" class="space-y-3">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- PROFILE SUB-TAB 2: EDITAR PERFIL -->
+      <div id="subtab-editprofile" class="profile-subtab hidden bg-darkcard border border-darkborder rounded-2xl p-5 space-y-4">
+        <h3 class="text-base font-bold text-white">Actualizar Información de Perfil</h3>
+        
+        <form onsubmit="submitProfileEdit(event)" class="space-y-3">
+          <div>
+            <label class="text-xs font-bold text-slate-300">Nombre Completo</label>
+            <input type="text" id="editFullName" required class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-slate-300">Teléfono / WhatsApp</label>
+            <input type="tel" id="editPhone" placeholder="809-555-0199" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs font-bold text-slate-300">Provincia</label>
+              <input type="text" id="editProvince" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+            </div>
+            <div>
+              <label class="text-xs font-bold text-slate-300">Municipio</label>
+              <input type="text" id="editMunicipality" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-slate-300">Descripción / Biografía Profesional</label>
+            <textarea id="editDescription" rows="2" placeholder="Experiencia, herramientas con las que cuentas..." class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500"></textarea>
+          </div>
+
+          <button type="submit" class="bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-sm transition">
+            💾 Guardar Cambios
+          </button>
+        </form>
+      </div>
+
+      <!-- PROFILE SUB-TAB 3: VERIFICACIÓN -->
+      <div id="subtab-verify" class="profile-subtab hidden bg-darkcard border border-darkborder rounded-2xl p-5 space-y-4">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-id-card text-brand-400"></i> Solicitud de Verificación de Técnico
+        </h3>
+        <p class="text-xs text-slate-400">Aumenta la confianza de tus clientes enviando tu cédula dominicana y certificados de estudio (INFOTEP o similar) para revisión administrativa.</p>
+
+        <form onsubmit="submitVerificationRequest(event)" class="space-y-3">
+          <div>
+            <label class="text-xs font-bold text-slate-300">Número de Cédula Dominicana (11 dígitos) *</label>
+            <input type="text" id="verifyIdCard" required placeholder="001-0000000-0" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-slate-300">Nombre de Curso o Certificado INFOTEP (Opcional)</label>
+            <input type="text" id="verifyInfotepCourse" placeholder="Ej: Técnico en Electricidad Residencial INFOTEP" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+          </div>
+
+          <button type="submit" class="bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-sm transition">
+            📄 Enviar Solicitud de Acreditación
+          </button>
+        </form>
+      </div>
+
+      <!-- PROFILE SUB-TAB 4: DATOS BANCARIOS DEL TÉCNICO -->
+      <div id="subtab-bank" class="profile-subtab hidden bg-darkcard border border-darkborder rounded-2xl p-5 space-y-4">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-building-columns text-brand-400"></i> Cuenta Bancaria para Recibir Pagos
+        </h3>
+        <p class="text-xs text-slate-400">Registra tu cuenta bancaria nacional para que ServiYa.do te transfiera los fondos custodiados una vez completes un trabajo.</p>
+
+        <form onsubmit="submitWorkerBankDetails(event)" class="space-y-3">
+          <div>
+            <label class="text-xs font-bold text-slate-300">Banco *</label>
+            <select id="workerBankName" required class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+              <option value="Banco de Reservas (Banreservas)">Banco de Reservas (Banreservas)</option>
+              <option value="Banco Popular Dominicano">Banco Popular Dominicano</option>
+              <option value="Banco BHD">Banco BHD</option>
+              <option value="Banco Santa Cruz">Banco Santa Cruz</option>
+              <option value="Asociación Popular (APAP)">Asociación Popular (APAP)</option>
+              <option value="Asociación La Nacional">Asociación La Nacional</option>
+              <option value="Qik Banco Digital">Qik Banco Digital</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-slate-300">Nombre del Titular de la Cuenta *</label>
+            <input type="text" id="workerAccountHolder" required placeholder="Nombre completo como figura en el banco" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs font-bold text-slate-300">Tipo de Cuenta *</label>
+              <select id="workerAccountType" required class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+                <option value="Ahorros">Ahorros</option>
+                <option value="Corriente">Corriente</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-xs font-bold text-slate-300">Número de Cuenta *</label>
+              <input type="text" id="workerAccountNumber" required placeholder="Ej: 9601234567" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-slate-300">Confirmar Número de Cuenta *</label>
+            <input type="text" id="workerConfirmAccountNumber" required placeholder="Repite el número de cuenta" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-brand-500">
+          </div>
+
+          <button type="submit" class="bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-sm transition">
+            💾 Guardar Datos Bancarios
+          </button>
+        </form>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==================== FIXED MOBILE BOTTOM NAVIGATION BAR ==================== -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-2 py-2">
+    <div class="max-w-md mx-auto grid grid-cols-5 gap-1">
+      <button onclick="switchTab('tab-home')" id="nav-tab-home" class="nav-btn active-nav text-brand-400 flex flex-col items-center py-1 transition">
+        <i class="fa-solid fa-house text-lg"></i>
+        <span class="text-[10px] font-bold mt-0.5">Inicio</span>
+      </button>
+
+      <button onclick="switchTab('tab-search')" id="nav-tab-search" class="nav-btn text-slate-400 hover:text-brand-400 flex flex-col items-center py-1 transition">
+        <i class="fa-solid fa-magnifying-glass text-lg"></i>
+        <span class="text-[10px] font-bold mt-0.5">Buscar</span>
+      </button>
+
+      <button onclick="switchTab('tab-publish')" id="nav-tab-publish" class="nav-btn text-slate-400 hover:text-brand-400 flex flex-col items-center py-1 transition">
+        <div class="w-9 h-9 rounded-full bg-brand-500 text-slate-950 flex items-center justify-center font-bold text-lg shadow-lg shadow-brand-500/30 -mt-3">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+        <span class="text-[10px] font-bold mt-0.5">Publicar</span>
+      </button>
+
+      <button onclick="switchTab('tab-messages')" id="nav-tab-messages" class="nav-btn text-slate-400 hover:text-brand-400 flex flex-col items-center py-1 transition relative">
+        <i class="fa-solid fa-comment-dots text-lg"></i>
+        <span class="text-[10px] font-bold mt-0.5">Mensajes</span>
+      </button>
+
+      <button onclick="switchTab('tab-profile')" id="nav-tab-profile" class="nav-btn text-slate-400 hover:text-brand-400 flex flex-col items-center py-1 transition">
+        <i class="fa-solid fa-user text-lg"></i>
+        <span class="text-[10px] font-bold mt-0.5">Mi Cuenta</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- MODAL 1: AUTH (LOGIN / REGISTER) -->
+  <div id="authModal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-3xl p-6 w-full max-w-md space-y-5 shadow-2xl relative animate-fade-in">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+
+      <div class="text-center space-y-1">
+        <h3 id="authModalTitle" class="text-xl font-extrabold text-white">Iniciar Sesión en ServiYa.do</h3>
+        <p class="text-xs text-slate-400">Accede a tu cuenta para publicar o postularte a servicios.</p>
+      </div>
+
+      <!-- Auth Sub-toggle -->
+      <div class="flex bg-slate-900 p-1 rounded-xl">
+        <button onclick="toggleAuthMode('login')" id="btnToggleLogin" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-brand-500 text-slate-950 transition">Iniciar Sesión</button>
+        <button onclick="toggleAuthMode('register')" id="btnToggleRegister" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">Registrar Cuenta</button>
+      </div>
+
+      <form id="authForm" onsubmit="submitAuthForm(event)" class="space-y-3">
+        
+        <!-- Registration Full Name & Role (Shown only on register mode) -->
+        <div id="registerFields" class="hidden space-y-3">
+          <div>
+            <label class="text-xs font-bold text-slate-300">Nombre Completo *</label>
+            <input type="text" id="authFullName" placeholder="Ej: Juan Pérez" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white outline-none focus:border-brand-500">
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-slate-300">Rol en la Plataforma *</label>
+            <select id="authRole" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white outline-none focus:border-brand-500">
+              <option value="cliente">👤 Cliente (Busco contratar servicios)</option>
+              <option value="tecnico">🛠️ Técnico / Trabajador (Ofrezco mis servicios)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-300">Correo Electrónico *</label>
+          <input type="email" id="authEmail" required placeholder="correo@ejemplo.com" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white outline-none focus:border-brand-500">
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-slate-300">Contraseña *</label>
+          <input type="password" id="authPassword" required placeholder="Mínimo 6 caracteres" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white outline-none focus:border-brand-500">
+        </div>
+
+        <button type="submit" id="authSubmitBtn" class="w-full bg-brand-500 hover:bg-brand-400 text-slate-950 font-black py-3 rounded-xl transition text-sm shadow-lg shadow-brand-500/20">
+          Iniciar Sesión
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: CHAMBA DETAIL & POSTULATION FORM -->
+  <div id="chambaDetailModal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-3xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto space-y-5 shadow-2xl relative">
+      <button onclick="closeChambaDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+
+      <!-- Content populated dynamically -->
+      <div id="chambaDetailBody" class="space-y-4">
+        <!-- Body html inserted via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ESCROW PAYMENT & RECEIPT UPLOAD -->
+  <div id="paymentModal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-3xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl relative">
+      <button onclick="closePaymentModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      
+      <div id="paymentModalBody" class="space-y-4">
+        <!-- Body html inserted via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: NOTIFICATIONS -->
+  <div id="notifModal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-3xl p-5 w-full max-w-md max-h-[80vh] overflow-y-auto space-y-4 shadow-2xl relative">
+      <button onclick="closeNotificationsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-bell text-brand-400"></i> Notificaciones
+        </h3>
+        <button onclick="markAllNotificationsRead()" class="text-xs text-brand-400 hover:underline font-semibold">Marcar leídas</button>
+      </div>
+
+      <div id="notifList" class="space-y-2 text-xs text-slate-400 text-center py-6">
+        No tienes notificaciones recientes.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT APP ENGINE ==================== -->
+  <script>
+    const API_URL = '/api/v1';
+
+    // APP STATE
+    let currentUser = null;
+    let currentChambas = [];
+    let activeCategory = 'Todas';
+    let authMode = 'login'; // 'login' or 'register'
+    let activeChatChambaId = null;
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', () => {
+      checkAuthState();
+      loadChambas();
+    });
+
+    // TOAST NOTIFICATION HELPERS
+    function showToast(text, isError = false) {
+      const toast = document.getElementById('globalToast');
+      const toastText = document.getElementById('toastText');
+      toastText.textContent = text;
+      toast.className = `mb-4 p-3.5 rounded-xl text-sm font-semibold border transition-all flex items-center justify-between ${
+        isError ? 'bg-rose-950/80 text-rose-300 border-rose-800' : 'bg-brand-950/80 text-brand-300 border-brand-800'
+      }`;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 5000);
+    }
+    function hideToast() {
+      document.getElementById('globalToast').classList.add('hidden');
+    }
+
+    // AUTH HEADERS HELPER
+    function getAuthHeaders() {
+      const token = localStorage.getItem('access_token');
+      return token ? { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
+    }
+
+    // TAB NAVIGATION ENGINE
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(el => {
+        el.classList.remove('active-nav', 'text-brand-400');
+        el.classList.add('text-slate-400');
+      });
+
+      const selectedTab = document.getElementById(tabId);
+      if (selectedTab) selectedTab.classList.remove('hidden');
+
+      const navBtn = document.getElementById(`nav-${tabId}`);
+      if (navBtn) {
+        navBtn.classList.add('active-nav', 'text-brand-400');
+        navBtn.classList.remove('text-slate-400');
       }
 
-      chambasContainer.appendChild(card);
-    });
-  }
+      if (tabId === 'tab-messages') loadConversations();
+      if (tabId === 'tab-profile') loadMyProfileData();
+    }
 
-  if (filtroProvinciaWeb) {
-    filtroProvinciaWeb.addEventListener("change", () => renderChambas(currentChambasList));
-  }
+    // CHECK AUTH STATE ON LAUNCH
+    async function checkAuthState() {
+      const token = localStorage.getItem('access_token');
+      const headerAuth = document.getElementById('headerAuthContainer');
+      const navAdminBtn = document.getElementById('navAdminBtn');
 
-  onSnapshot(chambasQuery, (snapshot) => {
-    currentChambasList = [];
-    snapshot.forEach((docSnap) => {
-      currentChambasList.push({ id: docSnap.id, data: docSnap.data() });
-    });
-    renderChambas(currentChambasList);
-  }, (error) => {
-    console.error("Error escuchando chambas:", error);
-    chambasContainer.innerHTML = `<p style="text-align:center;color:#ff4d4d;font-size:12px;padding:15px">Error al sincronizar con Firestore: ${error.message}</p>`;
-  });
+      if (!token) {
+        currentUser = null;
+        headerAuth.innerHTML = `
+          <button onclick="openAuthModal()" class="bg-brand-500 hover:bg-brand-400 text-slate-950 font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-lg shadow-brand-500/20 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+          </button>`;
+        navAdminBtn.classList.add('hidden');
+        return;
+      }
 
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
+      try {
+        const res = await fetch(`${API_URL}/auth/me`, { headers: getAuthHeaders() });
+        if (res.ok) {
+          currentUser = await res.json();
+          
+          // Render header profile avatar
+          const initial = (currentUser.full_name || currentUser.email).charAt(0).toUpperCase();
+          headerAuth.innerHTML = `
+            <button onclick="switchTab('tab-profile')" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2.5 py-1.5 rounded-xl transition">
+              <div class="w-6 h-6 rounded-lg bg-brand-500 text-slate-950 font-black text-xs flex items-center justify-center">
+                ${initial}
+              </div>
+              <span class="text-xs font-bold text-white max-w-[100px] truncate hidden sm:inline">${currentUser.full_name || currentUser.email}</span>
+            </button>`;
 
-  // PWA Service Worker Registration
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then((reg) => console.log('ServiYa.do 🇩🇴 PWA: Service Worker activo en alcance:', reg.scope))
-        .catch((err) => console.warn('ServiYa.do 🇩🇴 PWA: Service Worker no registrado:', err));
-    });
-  }
-</script>
+          if (currentUser.role === 'admin') navAdminBtn.classList.remove('hidden');
+          else navAdminBtn.classList.add('hidden');
+
+          loadUnreadNotifCount();
+        } else {
+          logout();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('access_token');
+      currentUser = null;
+      checkAuthState();
+      showToast('Sesión cerrada correctamente.');
+      switchTab('tab-home');
+    }
+
+    // AUTH MODAL LOGIC
+    function openAuthModal() {
+      document.getElementById('authModal').classList.remove('hidden');
+    }
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+    function toggleAuthMode(mode) {
+      authMode = mode;
+      const title = document.getElementById('authModalTitle');
+      const btnLogin = document.getElementById('btnToggleLogin');
+      const btnRegister = document.getElementById('btnToggleRegister');
+      const registerFields = document.getElementById('registerFields');
+      const submitBtn = document.getElementById('authSubmitBtn');
+
+      if (mode === 'register') {
+        title.textContent = 'Crear Cuenta en ServiYa.do 🇩🇴';
+        btnRegister.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg bg-brand-500 text-slate-950 transition';
+        btnLogin.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition';
+        registerFields.classList.remove('hidden');
+        submitBtn.textContent = 'Registrar Cuenta';
+      } else {
+        title.textContent = 'Iniciar Sesión en ServiYa.do';
+        btnLogin.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg bg-brand-500 text-slate-950 transition';
+        btnRegister.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition';
+        registerFields.classList.add('hidden');
+        submitBtn.textContent = 'Iniciar Sesión';
+      }
+    }
+
+    async function submitAuthForm(e) {
+      e.preventDefault();
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+
+      if (!email || !password) return showToast('Completa correo y contraseña', true);
+
+      try {
+        if (authMode === 'register') {
+          const fullName = document.getElementById('authFullName').value.trim();
+          const role = document.getElementById('authRole').value;
+          if (!fullName) return showToast('Escribe tu nombre completo', true);
+
+          const res = await fetch(`${API_URL}/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ full_name: fullName, email, password, role, province: 'Santo Domingo' })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            localStorage.setItem('access_token', data.access_token);
+            closeAuthModal();
+            showToast('¡Cuenta creada con éxito! 🎉');
+            await checkAuthState();
+          } else {
+            showToast(data.detail || 'Error al registrar', true);
+          }
+        } else {
+          const res = await fetch(`${API_URL}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            localStorage.setItem('access_token', data.access_token);
+            closeAuthModal();
+            showToast('¡Bienvenido de nuevo!');
+            await checkAuthState();
+          } else {
+            showToast(data.detail || 'Credenciales incorrectas', true);
+          }
+        }
+      } catch (err) {
+        showToast('Error de conexión con el servidor', true);
+      }
+    }
+
+    // CHAMBAS FEED & FILTERS
+    async function loadChambas() {
+      try {
+        const res = await fetch(`${API_URL}/chambas/`);
+        if (res.ok) {
+          currentChambas = await res.json();
+          renderChambasFeed();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function selectCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.textContent.includes(cat) || (cat === 'Todas' && btn.textContent.includes('Todos'))) {
+          btn.className = 'cat-pill active-cat px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-brand-500 text-slate-950 transition';
+        } else {
+          btn.className = 'cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-slate-800 text-slate-300 hover:text-white transition';
+        }
+      });
+      filterChambas();
+    }
+
+    function filterByCategoryFromSearch(cat) {
+      switchTab('tab-home');
+      selectCategory(cat);
+    }
+
+    function filterChambas() {
+      renderChambasFeed();
+    }
+
+    function renderChambasFeed() {
+      const grid = document.getElementById('chambasGrid');
+      const counter = document.getElementById('chambaCounter');
+      const search = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+      const province = document.getElementById('provinceSelect').value;
+
+      const filtered = currentChambas.filter(item => {
+        const matchCat = activeCategory === 'Todas' || (item.category_name || '').toLowerCase().includes(activeCategory.toLowerCase());
+        const matchProv = province === 'Todas' || (item.province || '').toLowerCase().includes(province.toLowerCase());
+        const matchSearch = !search || (item.title || '').toLowerCase().includes(search) || (item.description || '').toLowerCase().includes(search);
+        return matchCat && matchProv && matchSearch;
+      });
+
+      counter.textContent = `${filtered.length} de ${currentChambas.length} chambas`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500 space-y-2 bg-darkcard border border-darkborder rounded-2xl p-6">
+            <i class="fa-solid fa-briefcase text-4xl text-slate-600 mb-2 block"></i>
+            <p class="font-bold text-sm text-slate-300">No se encontraron chambas con los filtros actuales.</p>
+            <p class="text-xs">Intenta cambiar la provincia o publicar tu propia solicitud.</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(c => {
+        const priceFormatted = 'RD$ ' + Number(c.budget_rd || 0).toLocaleString();
+        const createdDate = new Date(c.created_at).toLocaleDateString('es-DO', { day: 'numeric', month: 'short' });
+        
+        return `
+          <div class="bg-darkcard border border-darkborder hover:border-brand-500/40 transition-all rounded-2xl p-4 space-y-3 shadow-lg flex flex-col justify-between group">
+            <div class="space-y-2">
+              <!-- Top Category & Status Badge -->
+              <div class="flex items-center justify-between">
+                <span class="bg-brand-500/10 text-brand-400 border border-brand-500/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                  🏷️ ${escapeHtml(c.category_name || 'Servicio')}
+                </span>
+                <span class="text-[11px] text-slate-400 font-medium">
+                  <i class="fa-regular fa-clock"></i> ${createdDate}
+                </span>
+              </div>
+
+              <!-- Title -->
+              <h3 class="font-extrabold text-base text-white group-hover:text-brand-400 transition leading-snug">
+                ${escapeHtml(c.title)}
+              </h3>
+
+              <!-- Description -->
+              <p class="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                ${escapeHtml(c.description)}
+              </p>
+            </div>
+
+            <!-- Meta & Action -->
+            <div class="pt-3 border-t border-slate-800 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-slate-400 font-medium flex items-center gap-1">
+                  <i class="fa-solid fa-location-dot text-brand-400"></i> ${escapeHtml(c.province)}
+                </span>
+                <span class="text-base font-extrabold text-brand-400 bg-brand-500/10 px-2.5 py-1 rounded-xl">
+                  ${priceFormatted}
+                </span>
+              </div>
+
+              <div class="flex gap-2">
+                <button onclick="openChambaDetail('${c.id}')" class="flex-1 bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold py-2 rounded-xl text-xs transition shadow-md shadow-brand-500/10 flex items-center justify-center gap-1.5">
+                  <i class="fa-solid fa-eye"></i> Ver Detalles / Postularme
+                </button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // CHAMBA DETAIL & POSTULATION MODAL
+    async function openChambaDetail(chambaId) {
+      const modal = document.getElementById('chambaDetailModal');
+      const body = document.getElementById('chambaDetailBody');
+      modal.classList.remove('hidden');
+
+      body.innerHTML = `
+        <div class="text-center py-12 text-slate-400">
+          <i class="fa-solid fa-circle-notch animate-spin text-2xl text-brand-400 mb-2 block"></i>
+          Cargando detalles de la chamba...
+        </div>`;
+
+      try {
+        const res = await fetch(`${API_URL}/chambas/${chambaId}`);
+        if (!res.ok) return body.innerHTML = `<p class="text-rose-400 text-sm">Error al cargar la chamba.</p>`;
+        
+        const chamba = await res.json();
+        const priceFormatted = 'RD$ ' + Number(chamba.budget_rd || 0).toLocaleString();
+
+        let postulationSectionHtml = '';
+        if (!currentUser) {
+          postulationSectionHtml = `
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-center space-y-2">
+              <p class="text-xs text-slate-300">Debes iniciar sesión para postularte a este trabajo.</p>
+              <button onclick="closeChambaDetailModal(); openAuthModal();" class="bg-brand-500 text-slate-950 font-bold text-xs px-4 py-2 rounded-xl">Iniciar Sesión</button>
+            </div>`;
+        } else if (currentUser.id === chamba.client_id) {
+          postulationSectionHtml = `
+            <div class="bg-brand-500/10 border border-brand-500/30 p-3.5 rounded-xl text-xs text-brand-400 font-semibold flex items-center justify-between">
+              <span> Eres el creador de esta publicación.</span>
+              <button onclick="closeChambaDetailModal(); switchTab('tab-profile');" class="bg-brand-500 text-slate-950 font-bold px-3 py-1 rounded-lg">Ver mis postulantes</button>
+            </div>`;
+        } else {
+          postulationSectionHtml = `
+            <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
+              <h4 class="font-bold text-sm text-white flex items-center gap-1.5">
+                <i class="fa-solid fa-paper-plane text-brand-400"></i> Enviar Postulación de Trabajo
+              </h4>
+
+              <form onsubmit="submitPostulation(event, '${chamba.id}')" class="space-y-3">
+                <div>
+                  <label class="text-xs font-bold text-slate-300">Tu Precio Propuesto (RD$)</label>
+                  <input type="number" id="postPrice" required value="${chamba.budget_rd}" class="w-full mt-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-bold outline-none focus:border-brand-500">
+                </div>
+
+                <div>
+                  <label class="text-xs font-bold text-slate-300">Mensaje de Propuesta para el Cliente</label>
+                  <textarea id="postMessage" rows="2" placeholder="Explica tu experiencia, herramientas disponibles o fecha en la que puedes ir..." class="w-full mt-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-brand-500"></textarea>
+                </div>
+
+                <div class="space-y-1.5 text-xs text-slate-300">
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="postTools" checked class="rounded accent-brand-500"> Tengo las herramientas necesarias
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="postCanPerform" checked class="rounded accent-brand-500"> Confirmo que conozco el trabajo a realizar
+                  </label>
+                </div>
+
+                <button type="submit" class="w-full bg-brand-500 hover:bg-brand-400 text-slate-950 font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-brand-500/20">
+                  🚀 Enviar Postulación
+                </button>
+              </form>
+            </div>`;
+        }
+
+        body.innerHTML = `
+          <div class="space-y-4">
+            <!-- Header detail -->
+            <div>
+              <span class="bg-brand-500/10 text-brand-400 border border-brand-500/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                ${escapeHtml(chamba.category_name || 'Servicio')}
+              </span>
+              <h2 class="text-xl font-extrabold text-white mt-2">${escapeHtml(chamba.title)}</h2>
+              <div class="flex items-center gap-3 text-xs text-slate-400 mt-1">
+                <span>📍 ${escapeHtml(chamba.province)} (${escapeHtml(chamba.municipality || 'Santo Domingo')})</span>
+                <span>• 👤 ${escapeHtml(chamba.client_name || 'Cliente')}</span>
+              </div>
+            </div>
+
+            <!-- Price banner -->
+            <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-2xl flex items-center justify-between">
+              <div>
+                <span class="text-xs text-slate-400">Presupuesto sugerido</span>
+                <div class="text-2xl font-black text-brand-400">${priceFormatted}</div>
+              </div>
+              <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1 rounded-full uppercase">
+                ${escapeHtml(chamba.status)}
+              </span>
+            </div>
+
+            <!-- Description -->
+            <div>
+              <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Detalles del Trabajo</h4>
+              <p class="text-xs text-slate-300 bg-slate-900/60 p-3 rounded-xl border border-slate-800 leading-relaxed whitespace-pre-line">${escapeHtml(chamba.description)}</p>
+            </div>
+
+            <!-- Postulation area -->
+            ${postulationSectionHtml}
+          </div>`;
+      } catch (err) {
+        body.innerHTML = `<p class="text-rose-400 text-sm">Error de conexión al cargar detalles.</p>`;
+      }
+    }
+
+    function closeChambaDetailModal() {
+      document.getElementById('chambaDetailModal').classList.add('hidden');
+    }
+
+    async function submitPostulation(e, chambaId) {
+      e.preventDefault();
+      const price = parseFloat(document.getElementById('postPrice').value);
+      const message = document.getElementById('postMessage').value.trim();
+      const tools = document.getElementById('postTools').checked;
+      const canPerform = document.getElementById('postCanPerform').checked;
+
+      try {
+        const res = await fetch(`${API_URL}/postulaciones/`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            chamba_id: chambaId,
+            proposed_price_rd: price,
+            proposal_message: message,
+            has_tools: tools,
+            can_perform: canPerform,
+            available_on_date: true,
+            needs_client_supplies: false,
+            confirm_details_read: true
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          closeChambaDetailModal();
+          showToast('¡Postulación enviada exitosamente! 🎉');
+        } else {
+          showToast(data.detail || 'Error al postularse', true);
+        }
+      } catch (err) {
+        showToast('Error de conexión con el servidor', true);
+      }
+    }
+
+    // PUBLISH CHAMBA FORM SUBMISSION
+    async function submitPublishForm(e) {
+      e.preventDefault();
+      if (!currentUser) {
+        openAuthModal();
+        return showToast('Inicia sesión para publicar', true);
+      }
+
+      const title = document.getElementById('pubTitle').value.trim();
+      const category = document.getElementById('pubCategory').value;
+      const province = document.getElementById('pubProvince').value;
+      const municipality = document.getElementById('pubMunicipality').value.trim();
+      const budget = parseFloat(document.getElementById('pubBudget').value);
+      const description = document.getElementById('pubDescription').value.trim();
+      const photoUrl = document.getElementById('pubPhotoUrl').value.trim();
+
+      const btn = document.getElementById('btnSubmitChamba');
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`${API_URL}/chambas/`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            title,
+            category_name: category,
+            province,
+            municipality,
+            budget_rd: budget,
+            description,
+            photos: photoUrl ? [photoUrl] : []
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          document.getElementById('publishForm').reset();
+          showToast('¡Chamba publicada con éxito! 🎉');
+          loadChambas();
+          switchTab('tab-home');
+        } else {
+          showToast(data.detail || 'Error al publicar', true);
+        }
+      } catch (err) {
+        showToast('Error de conexión', true);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // PROFILE SUBTAB SWITCHER
+    function switchProfileSubtab(subtabId) {
+      document.querySelectorAll('.profile-subtab').forEach(el => el.classList.add('hidden'));
+      document.getElementById(subtabId).classList.remove('hidden');
+
+      const tabsBtnMap = {
+        'subtab-mychambas': 'btnSubtabMyChambas',
+        'subtab-editprofile': 'btnSubtabEditProfile',
+        'subtab-verify': 'btnSubtabVerify',
+        'subtab-bank': 'btnSubtabBank'
+      };
+
+      Object.keys(tabsBtnMap).forEach(key => {
+        const btn = document.getElementById(tabsBtnMap[key]);
+        if (key === subtabId) {
+          btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-500 text-slate-950 transition whitespace-nowrap';
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:text-white transition whitespace-nowrap';
+        }
+      });
+    }
+
+    async function loadMyProfileData() {
+      if (!currentUser) return;
+
+      document.getElementById('userNameText').textContent = currentUser.full_name || 'Usuario';
+      document.getElementById('userEmailText').textContent = currentUser.email;
+      document.getElementById('userRoleBadge').textContent = (currentUser.role || 'cliente').toUpperCase();
+      document.getElementById('userRatingText').textContent = (currentUser.rating_average || 5.0).toFixed(1);
+      document.getElementById('userJobsText').textContent = currentUser.completed_jobs || 0;
+      document.getElementById('userAvatarCircle').textContent = (currentUser.full_name || currentUser.email).charAt(0).toUpperCase();
+
+      if (currentUser.is_verified) document.getElementById('userVerifiedBadge').classList.remove('hidden');
+
+      // Populate edit fields
+      document.getElementById('editFullName').value = currentUser.full_name || '';
+      document.getElementById('editPhone').value = currentUser.phone || '';
+      document.getElementById('editProvince').value = currentUser.province || 'Santo Domingo';
+      document.getElementById('editMunicipality').value = currentUser.municipality || 'Distrito Nacional';
+      document.getElementById('editDescription').value = currentUser.description || '';
+
+      loadMyChambasHistory();
+    }
+
+    async function loadMyChambasHistory() {
+      const container = document.getElementById('myChambasContainer');
+      container.innerHTML = `<p class="text-xs text-slate-400 py-4">Cargando publicaciones...</p>`;
+
+      try {
+        const res = await fetch(`${API_URL}/chambas/user/my-chambas`, { headers: getAuthHeaders() });
+        if (!res.ok) return container.innerHTML = `<p class="text-xs text-rose-400">Error al obtener publicaciones.</p>`;
+        
+        const list = await res.json();
+        if (list.length === 0) {
+          container.innerHTML = `<div class="bg-darkcard border border-darkborder p-4 rounded-xl text-xs text-slate-400 text-center">No has publicado ni participado en ninguna chamba aún.</div>`;
+          return;
+        }
+
+        container.innerHTML = list.map(item => {
+          const priceFormatted = 'RD$ ' + Number(item.budget_rd || 0).toLocaleString();
+          return `
+            <div class="bg-darkcard border border-darkborder p-4 rounded-2xl space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-sm text-white">${escapeHtml(item.title)}</span>
+                <span class="text-xs font-bold text-brand-400">${priceFormatted}</span>
+              </div>
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <span>📍 ${escapeHtml(item.province)}</span>
+                <span class="bg-slate-800 text-brand-300 px-2 py-0.5 rounded-md font-semibold">${item.status.toUpperCase()}</span>
+              </div>
+              
+              ${currentUser.role === 'cliente' ? `
+                <div class="pt-2 border-t border-slate-800 flex justify-end">
+                  <button onclick="viewPostulationsForChamba('${item.id}')" class="bg-brand-500 text-slate-950 font-bold text-xs px-3 py-1.5 rounded-lg">
+                    👥 Ver Postulados (${item.postulaciones_count || 0})
+                  </button>
+                </div>` : ''}
+            </div>`;
+        }).join('');
+      } catch (err) {
+        container.innerHTML = `<p class="text-xs text-rose-400">Error de conexión.</p>`;
+      }
+    }
+
+    // VIEW APPLICANTS FOR CLIENT
+    async function viewPostulationsForChamba(chambaId) {
+      const modal = document.getElementById('chambaDetailModal');
+      const body = document.getElementById('chambaDetailBody');
+      modal.classList.remove('hidden');
+
+      body.innerHTML = `<div class="text-center py-8 text-xs text-slate-400">Cargando postulados...</div>`;
+
+      try {
+        const res = await fetch(`${API_URL}/postulaciones/chamba/${chambaId}`, { headers: getAuthHeaders() });
+        const list = await res.json();
+
+        if (list.length === 0) {
+          body.innerHTML = `
+            <h3 class="font-bold text-sm text-white mb-2">Postulaciones Recibidas</h3>
+            <p class="text-xs text-slate-400">Aún no se han recibido postulaciones para esta chamba.</p>`;
+          return;
+        }
+
+        body.innerHTML = `
+          <h3 class="font-bold text-base text-white mb-3">Técnicos Postulados (${list.length})</h3>
+          <div class="space-y-3">
+            ${list.map(p => `
+              <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-xl space-y-2">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <span class="font-bold text-sm text-white">${escapeHtml(p.worker_name || 'Técnico')}</span>
+                    <span class="text-xs text-amber-400 block"><i class="fa-solid fa-star"></i> ${p.worker_rating || 5.0} (${p.worker_jobs || 0} trabajos)</span>
+                  </div>
+                  <span class="text-brand-400 font-extrabold text-sm">RD$ ${Number(p.proposed_price_rd || 0).toLocaleString()}</span>
+                </div>
+                <p class="text-xs text-slate-300 italic bg-slate-950 p-2 rounded-lg">"${escapeHtml(p.proposal_message || 'Sin mensaje')}"</p>
+                
+                ${p.status === 'pendiente' ? `
+                  <button onclick="selectWorker('${p.id}')" class="w-full bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold text-xs py-2 rounded-xl">
+                    ✅ Seleccionar este Técnico
+                  </button>` : `
+                  <span class="text-xs font-bold text-brand-400 block text-right">${p.status.toUpperCase()}</span>`}
+              </div>`).join('')}
+          </div>`;
+      } catch (err) {
+        body.innerHTML = `<p class="text-xs text-rose-400">Error al cargar postulaciones.</p>`;
+      }
+    }
+
+    async function selectWorker(postulacionId) {
+      try {
+        const res = await fetch(`${API_URL}/postulaciones/${postulacionId}/select`, {
+          method: 'POST',
+          headers: getAuthHeaders()
+        });
+        const data = await res.json();
+        if (res.ok) {
+          closeChambaDetailModal();
+          showToast('¡Técnico seleccionado! Inicia el proceso de pago en custodia.');
+          loadMyChambasHistory();
+        } else {
+          showToast(data.detail || 'Error al seleccionar técnico', true);
+        }
+      } catch (err) {
+        showToast('Error de conexión', true);
+      }
+    }
+
+    // SUBMIT PROFILE EDIT
+    async function submitProfileEdit(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('editFullName').value.trim();
+      const phone = document.getElementById('editPhone').value.trim();
+      const province = document.getElementById('editProvince').value.trim();
+      const municipality = document.getElementById('editMunicipality').value.trim();
+      const description = document.getElementById('editDescription').value.trim();
+
+      try {
+        const res = await fetch(`${API_URL}/auth/profile`, {
+          method: 'PUT',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ full_name: fullName, phone, province, municipality, description })
+        });
+        if (res.ok) {
+          showToast('Perfil actualizado con éxito');
+          await checkAuthState();
+        } else {
+          showToast('Error al actualizar perfil', true);
+        }
+      } catch (err) {
+        showToast('Error de conexión', true);
+      }
+    }
+
+    // SUBMIT VERIFICATION
+    async function submitVerificationRequest(e) {
+      e.preventDefault();
+      const idCard = document.getElementById('verifyIdCard').value.trim();
+      const course = document.getElementById('verifyInfotepCourse').value.trim();
+
+      try {
+        const res = await fetch(`${API_URL}/verificaciones/solicitar`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ id_card_number: idCard, infotep_course_name: course })
+        });
+        if (res.ok) {
+          showToast('Solicitud de verificación enviada correctamente');
+        } else {
+          showToast('Error enviando verificación', true);
+        }
+      } catch (err) {
+        showToast('Error de conexión', true);
+      }
+    }
+
+    // SUBMIT WORKER BANK DETAILS
+    async function submitWorkerBankDetails(e) {
+      e.preventDefault();
+      const bankName = document.getElementById('workerBankName').value;
+      const holder = document.getElementById('workerAccountHolder').value.trim();
+      const type = document.getElementById('workerAccountType').value;
+      const accountNum = document.getElementById('workerAccountNumber').value.trim();
+      const confirmNum = document.getElementById('workerConfirmAccountNumber').value.trim();
+
+      if (accountNum !== confirmNum) return showToast('Los números de cuenta no coinciden', true);
+
+      try {
+        const res = await fetch(`${API_URL}/pagos/worker-bank-account`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            bank_name: bankName,
+            account_holder: holder,
+            account_type: type,
+            account_number: accountNum,
+            confirm_account_number: confirmNum
+          })
+        });
+        if (res.ok) {
+          showToast('Datos bancarios registrados');
+        } else {
+          showToast('Error guardando datos bancarios', true);
+        }
+      } catch (err) {
+        showToast('Error de conexión', true);
+      }
+    }
+
+    // MESSAGES / CHAT ENGINE
+    async function loadConversations() {
+      const container = document.getElementById('conversationsList');
+      if (!currentUser) {
+        container.innerHTML = `<div class="text-center py-6">Inicia sesión para ver tus mensajes.</div>`;
+        return;
+      }
+
+      container.innerHTML = `<div class="text-center py-6 text-slate-400">Cargando chats...</div>`;
+
+      try {
+        const res = await fetch(`${API_URL}/chambas/user/my-chambas`, { headers: getAuthHeaders() });
+        if (res.ok) {
+          const chambas = await res.json();
+          const activeChambas = chambas.filter(c => c.worker_id && c.client_id);
+
+          if (activeChambas.length === 0) {
+            container.innerHTML = `<div class="text-center py-8 text-xs text-slate-500">No hay chats activos con técnicos seleccionados.</div>`;
+            return;
+          }
+
+          container.innerHTML = activeChambas.map(c => `
+            <button onclick="openChatForChamba('${c.id}', '${escapeHtml(c.title)}')" class="w-full text-left p-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 transition block">
+              <div class="font-bold text-xs text-white truncate">${escapeHtml(c.title)}</div>
+              <div class="text-[10px] text-slate-400 truncate">📍 ${escapeHtml(c.province)}</div>
+            </button>`).join('');
+        }
+      } catch (err) {
+        container.innerHTML = `<div class="text-center py-6 text-rose-400">Error al cargar chats.</div>`;
+      }
+    }
+
+    async function openChatForChamba(chambaId, title) {
+      activeChatChambaId = chambaId;
+      document.getElementById('chatTitle').textContent = title;
+      document.getElementById('chatMessageInput').disabled = false;
+      document.getElementById('chatSendBtn').disabled = false;
+      fetchChatMessages();
+    }
+
+    async function fetchChatMessages() {
+      if (!activeChatChambaId) return;
+      const log = document.getElementById('chatMessagesLog');
+
+      try {
+        const res = await fetch(`${API_URL}/chat/chamba/${activeChatChambaId}`, { headers: getAuthHeaders() });
+        if (res.ok) {
+          const messages = await res.json();
+          if (messages.length === 0) {
+            log.innerHTML = `<div class="text-center text-xs text-slate-500 py-12">Inicio de la conversación. Escribe un mensaje a continuación.</div>`;
+            return;
+          }
+
+          log.innerHTML = messages.map(m => {
+            const isMe = currentUser && m.sender_id === currentUser.id;
+            return `
+              <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} my-1">
+                <span class="text-[9px] text-slate-400 px-1">${escapeHtml(m.sender_name || 'Usuario')}</span>
+                <div class="max-w-[80%] px-3 py-2 rounded-2xl text-xs ${
+                  isMe ? 'bg-brand-500 text-slate-950 font-medium rounded-tr-none' : 'bg-slate-800 text-white rounded-tl-none border border-slate-700'
+                }">
+                  ${escapeHtml(m.content)}
+                </div>
+              </div>`;
+          }).join('');
+          log.scrollTop = log.scrollHeight;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function sendChatMessage(e) {
+      e.preventDefault();
+      if (!activeChatChambaId) return;
+      const input = document.getElementById('chatMessageInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+      try {
+        const res = await fetch(`${API_URL}/chat/`, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ chamba_id: activeChatChambaId, content: text, receiver_id: "" })
+        });
+        if (res.ok) {
+          fetchChatMessages();
+        }
+      } catch (err) {
+        showToast('Error al enviar mensaje', true);
+      }
+    }
+
+    // NOTIFICATIONS MODAL & BADGE
+    async function loadUnreadNotifCount() {
+      try {
+        const res = await fetch(`${API_URL}/notificaciones/unread-count`, { headers: getAuthHeaders() });
+        if (res.ok) {
+          const data = await res.json();
+          const badge = document.getElementById('notifBadge');
+          if (data.unread_count > 0) {
+            badge.textContent = data.unread_count;
+            badge.classList.remove('hidden');
+          } else {
+            badge.classList.add('hidden');
+          }
+        }
+      } catch (err) {}
+    }
+
+    async function openNotificationsModal() {
+      if (!currentUser) return openAuthModal();
+      document.getElementById('notifModal').classList.remove('hidden');
+      const list = document.getElementById('notifList');
+
+      list.innerHTML = `<div class="text-center py-6 text-slate-400">Cargando notificaciones...</div>`;
+
+      try {
+        const res = await fetch(`${API_URL}/notificaciones/`, { headers: getAuthHeaders() });
+        if (res.ok) {
+          const notifs = await res.json();
+          if (notifs.length === 0) {
+            list.innerHTML = `<div class="text-center py-6 text-slate-500">No tienes notificaciones.</div>`;
+            return;
+          }
+
+          list.innerHTML = notifs.map(n => `
+            <div class="p-3 rounded-xl bg-slate-900 border ${n.is_read ? 'border-slate-800' : 'border-brand-500/40 bg-brand-500/5'} text-left space-y-1">
+              <div class="font-bold text-xs text-white">${escapeHtml(n.title)}</div>
+              <p class="text-xs text-slate-300">${escapeHtml(n.message)}</p>
+            </div>`).join('');
+        }
+      } catch (err) {
+        list.innerHTML = `<div class="text-center py-6 text-rose-400">Error al obtener notificaciones.</div>`;
+      }
+    }
+
+    function closeNotificationsModal() {
+      document.getElementById('notifModal').classList.add('hidden');
+    }
+
+    async function markAllNotificationsRead() {
+      try {
+        await fetch(`${API_URL}/notificaciones/read-all`, { method: 'PUT', headers: getAuthHeaders() });
+        loadUnreadNotifCount();
+        openNotificationsModal();
+      } catch (err) {}
+    }
+
+    // ESTIMATOR CALCULATOR
+    function calculateEstimate() {
+      const complexity = parseFloat(document.getElementById('estimatorComplexity').value);
+      const cat = document.getElementById('estimatorCategory').value;
+      
+      let baseMin = 2000;
+      let baseMax = 3500;
+
+      if (cat.includes('Pintura')) { baseMin = 2500; baseMax = 4500; }
+      else if (cat.includes('Electricidad')) { baseMin = 1800; baseMax = 3800; }
+      else if (cat.includes('Plomería')) { baseMin = 1500; baseMax = 3200; }
+      else if (cat.includes('Aire')) { baseMin = 2000; baseMax = 3500; }
+      else if (cat.includes('Mudanza')) { baseMin = 3500; baseMax = 8000; }
+
+      const finalMin = Math.round((baseMin * complexity) / 100) * 100;
+      const finalMax = Math.round((baseMax * complexity) / 100) * 100;
+
+      document.getElementById('estimatorPriceText').textContent = `RD$ ${finalMin.toLocaleString()} - RD$ ${finalMax.toLocaleString()}`;
+      document.getElementById('estimatorResult').classList.remove('hidden');
+    }
+
+    // UTILS
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
 </body>
 </html>
