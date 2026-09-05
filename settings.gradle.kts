@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "CHAMBA RD"
+rootProject.name = "ServiYa"
 
 include(":app")

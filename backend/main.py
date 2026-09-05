@@ -12,7 +12,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title=settings.APP_NAME,
-    description="API REST de Producción para CHAMBA RD — Conectando clientes y técnicos profesionales en República Dominicana.",
+    description="API REST de Producción para ServiYa — Conectando clientes y técnicos profesionales en República Dominicana.",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -61,6 +61,16 @@ def serve_service_worker():
     if os.path.exists("public/sw.js"):
         return FileResponse("public/sw.js", media_type="application/javascript")
     return {"error": "sw not found"}
+
+
+@app.get("/admin")
+@app.get("/admin.html")
+def serve_admin_panel():
+    if os.path.exists("admin.html"):
+        return FileResponse("admin.html", media_type="text/html")
+    if os.path.exists("public/admin.html"):
+        return FileResponse("public/admin.html", media_type="text/html")
+    return {"error": "admin.html not found"}
 
 if os.path.exists("public/icons"):
     app.mount("/icons", StaticFiles(directory="public/icons"), name="icons")

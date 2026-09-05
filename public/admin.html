@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiYa — Panel de Administración</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        chamba: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d'
+                        },
+                        brand: {
+                            primary: '#0F172A',
+                            accent: '#10B981',
+                            warning: '#F59E0B',
+                            danger: '#EF4444',
+                            card: '#1E293B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- LOGIN CONTAINER -->
+    <div id="loginSection" class="flex-1 flex items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-8 max-w-md w-full shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4 text-emerald-400 text-2xl font-bold">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-white">ServiYa</h1>
+                <p class="text-slate-400 text-sm mt-1">Portal de Administración & Control</p>
+            </div>
+
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Correo Electrónico Admin</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-envelope absolute left-3.5 top-3.5 text-slate-500"></i>
+                        <input type="email" id="email" required placeholder="admin@chamba.do" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Contraseña</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-3.5 top-3.5 text-slate-500"></i>
+                        <input type="password" id="password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+                </div>
+
+                <div id="loginError" class="hidden p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs text-center font-medium"></div>
+
+                <button type="submit" id="btnLogin" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/20">
+                    <span>Iniciar Sesión de Administrador</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </form>
+            <div class="mt-6 text-center text-xs text-slate-500">
+                Credenciales predeterminadas de prueba:<br>
+                <code class="text-slate-400 font-mono">admin@chamba.do / AdminPass123!</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboardSection" class="hidden flex-1 flex flex-col md:flex-row">
+        <!-- SIDEBAR -->
+        <aside class="w-full md:w-64 bg-slate-800/80 border-r border-slate-700/60 p-6 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-10 h-10 bg-emerald-500/20 border border-emerald-500/30 rounded-xl flex items-center justify-center text-emerald-400 font-bold">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-white text-base">ServiYa</h2>
+                        <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">ADMIN PANEL</span>
+                    </div>
+                </div>
+
+                <!-- NAV LINKS -->
+                <nav class="space-y-1">
+                    <button onclick="switchTab('overview')" id="nav-overview" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+                        <i class="fa-solid fa-chart-line w-5 text-center"></i>
+                        <span>Resumen General</span>
+                    </button>
+                    <button onclick="switchTab('verifications')" id="nav-verifications" class="tab-nav w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-id-card w-5 text-center"></i>
+                            <span>Verificaciones</span>
+                        </div>
+                        <span id="badge-verifications" class="hidden bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                    </button>
+                    <button onclick="switchTab('payments')" id="nav-payments" class="tab-nav w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-money-check-dollar w-5 text-center"></i>
+                            <span>Pagos y Depósitos</span>
+                        </div>
+                        <span id="badge-payments" class="hidden bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                    </button>
+                    <button onclick="switchTab('disputes')" id="nav-disputes" class="tab-nav w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-scale-balanced w-5 text-center"></i>
+                            <span>Disputas y Reportes</span>
+                        </div>
+                        <span id="badge-disputes" class="hidden bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                    </button>
+                    <button onclick="switchTab('users')" id="nav-users" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+                        <i class="fa-solid fa-users w-5 text-center"></i>
+                        <span>Gestión de Usuarios</span>
+                    </button>
+                    <button onclick="switchTab('settings')" id="nav-settings" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+                        <i class="fa-solid fa-sliders w-5 text-center"></i>
+                        <span>Bancos y Comisión</span>
+                    </button>
+                    <button onclick="switchTab('admins')" id="nav-admins" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+                        <i class="fa-solid fa-user-shield w-5 text-center"></i>
+                        <span>Administradores</span>
+                    </button>
+                </nav>
+            </div>
+
+            <div class="pt-6 border-t border-slate-700/60">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="truncate pr-2">
+                        <p id="adminUserName" class="text-sm font-bold text-white truncate">Admin</p>
+                        <p id="adminUserEmail" class="text-xs text-slate-400 truncate">admin@chamba.do</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="w-full flex items-center justify-center space-x-2 bg-slate-700/50 hover:bg-red-500/20 hover:text-red-300 text-slate-300 border border-slate-600/50 hover:border-red-500/30 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Cerrar Sesión</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- CONTENT AREA -->
+        <main class="flex-1 p-6 md:p-8 overflow-y-auto">
+
+            <!-- OVERVIEW TAB -->
+            <div id="tab-overview-content" class="tab-content space-y-8">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-white">Panel de Control General</h1>
+                    <p class="text-slate-400 text-sm mt-1">Supervisión en tiempo real de operaciones, técnicos y transacciones.</p>
+                </div>
+
+                <!-- STATS CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase font-semibold">Usuarios Totales</span>
+                                <h3 id="statTotalUsers" class="text-2xl font-black text-white mt-1">--</h3>
+                            </div>
+                            <div class="p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl">
+                                <i class="fa-solid fa-users text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase font-semibold">Verificaciones Pendientes</span>
+                                <h3 id="statPendingVerifications" class="text-2xl font-black text-amber-400 mt-1">--</h3>
+                            </div>
+                            <div class="p-3 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-xl">
+                                <i class="fa-solid fa-id-card text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase font-semibold">Comisión Plataforma</span>
+                                <h3 id="statCommission" class="text-2xl font-black text-emerald-400 mt-1">--</h3>
+                            </div>
+                            <div class="p-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl">
+                                <i class="fa-solid fa-percent text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase font-semibold">Disputas Abiertas</span>
+                                <h3 id="statDisputes" class="text-2xl font-black text-rose-400 mt-1">--</h3>
+                            </div>
+                            <div class="p-3 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-xl">
+                                <i class="fa-solid fa-scale-balanced text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUICK ACTIONS & STATUS -->
+                <div class="bg-slate-800 border border-slate-700/70 rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">Estado del Sistema & Conexión</h3>
+                    <div class="flex items-center space-x-3 text-sm">
+                        <span class="inline-block w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="text-slate-200 font-medium">Backend FastAPI + PostgreSQL en línea y activo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VERIFICATIONS TAB -->
+            <div id="tab-verifications-content" class="tab-content hidden space-y-6">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-white">Solicitudes de Verificación de Técnicos</h1>
+                    <p class="text-slate-400 text-sm mt-1">Revisión de documentos de identidad, cédulas y certificados profesionales.</p>
+                </div>
+
+                <div id="verificationsList" class="space-y-4">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- PAYMENTS TAB -->
+            <div id="tab-payments-content" class="tab-content hidden space-y-6">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-white">Aprobación de Pagos y Depósitos</h1>
+                    <p class="text-slate-400 text-sm mt-1">Verifica los comprobantes bancarios subidos por los clientes para liberar fondos en retención (Escrow).</p>
+                </div>
+
+                <div id="paymentsList" class="space-y-4">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- DISPUTES TAB -->
+            <div id="tab-disputes-content" class="tab-content hidden space-y-6">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-white">Disputas & Reportes de Usuarios</h1>
+                    <p class="text-slate-400 text-sm mt-1">Gestión de conflictos, arbitraje de trabajos y reportes de comportamiento.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+                            <i class="fa-solid fa-scale-balanced text-rose-400"></i>
+                            <span>Disputas Activas</span>
+                        </h2>
+                        <div id="disputesList" class="space-y-4"></div>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+                            <i class="fa-solid fa-flag text-amber-400"></i>
+                            <span>Reportes de Usuarios</span>
+                        </h2>
+                        <div id="reportsList" class="space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- USERS TAB -->
+            <div id="tab-users-content" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h1 class="text-2xl font-extrabold text-white">Gestión de Usuarios</h1>
+                        <p class="text-slate-400 text-sm mt-1">Lista completa de clientes, técnicos y administradores registrados.</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <select id="userRoleFilter" onchange="loadUsers()" class="bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="">Todos los roles</option>
+                            <option value="cliente">Clientes</option>
+                            <option value="tecnico">Técnicos</option>
+                            <option value="admin">Administradores</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700/70 rounded-2xl overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-slate-300">
+                            <thead class="bg-slate-900/60 text-xs font-semibold uppercase text-slate-400 border-b border-slate-700/60">
+                                <tr>
+                                    <th class="p-4">Usuario</th>
+                                    <th class="p-4">Rol</th>
+                                    <th class="p-4">Ubicación</th>
+                                    <th class="p-4">Estado Verificación</th>
+                                    <th class="p-4">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody" class="divide-y divide-slate-700/40">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS TAB -->
+            <div id="tab-settings-content" class="tab-content hidden space-y-8">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-white">Configuración del Sistema</h1>
+                    <p class="text-slate-400 text-sm mt-1">Configuración de cuentas bancarias de ServiYa y tasa de comisión.</p>
+                </div>
+
+                <!-- COMMISSION FORM -->
+                <div class="bg-slate-800 border border-slate-700/70 rounded-2xl p-6">
+                    <h2 class="text-lg font-bold text-white mb-2">Comisión de la Plataforma</h2>
+                    <p class="text-xs text-slate-400 mb-4">Porcentaje descontado del pago total al técnico en cada trabajo completado.</p>
+
+                    <form id="commissionForm" class="flex items-center space-x-4 max-w-md">
+                        <div class="relative flex-1">
+                            <input type="number" step="0.01" min="0" max="0.5" id="commissionInput" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                            <span class="absolute right-4 top-2.5 text-xs text-slate-400 font-bold">% Decimal</span>
+                        </div>
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2.5 rounded-xl text-xs transition-colors">
+                            Guardar Tasa
+                        </button>
+                    </form>
+                </div>
+
+                <!-- BANK ACCOUNTS LIST -->
+                <div class="bg-slate-800 border border-slate-700/70 rounded-2xl p-6">
+                    <h2 class="text-lg font-bold text-white mb-4">Cuentas Bancarias Oficiales de Depósito</h2>
+                    <div id="bankAccountsList" class="space-y-4"></div>
+                </div>
+            </div>
+
+            <!-- ADMINS TAB -->
+            <div id="tab-admins-content" class="tab-content hidden space-y-8">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-extrabold text-white">Administradores del Sistema</h1>
+                        <p class="text-slate-400 text-sm mt-1">Crea y gestiona cuentas con acceso al panel de administración.</p>
+                    </div>
+                </div>
+
+                <!-- CREATE ADMIN FORM -->
+                <div class="bg-slate-800 border border-slate-700/70 rounded-2xl p-6">
+                    <h2 class="text-lg font-bold text-white mb-4">Crear Nuevo Administrador</h2>
+                    <form id="createAdminForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre Completo</label>
+                            <input type="text" id="adminFullName" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Correo Electrónico</label>
+                            <input type="email" id="adminEmail" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Teléfono</label>
+                            <input type="text" id="adminPhone" placeholder="809-555-0100" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Contraseña Inicial</label>
+                            <input type="password" id="adminPassword" required minlength="8" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
+                        </div>
+                        <div class="md:col-span-2 pt-2">
+                            <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-2.5 rounded-xl text-xs transition-colors">
+                                Registrar Administrador
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700/70 rounded-2xl p-6">
+                    <h2 class="text-lg font-bold text-white mb-4">Administradores Registrados</h2>
+                    <div id="adminsList" class="space-y-3"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        const API_BASE = '/api/v1';
+        let authToken = localStorage.getItem('admin_token') || '';
+
+        // DOM LOAD
+        document.addEventListener('DOMContentLoaded', () => {
+            if (authToken) {
+                verifyTokenAndLoad();
+            } else {
+                showLogin();
+            }
+
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('commissionForm').addEventListener('submit', handleUpdateCommission);
+            document.getElementById('createAdminForm').addEventListener('submit', handleCreateAdmin);
+        });
+
+        function showLogin() {
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            switchTab('overview');
+            loadAllData();
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errDiv = document.getElementById('loginError');
+            errDiv.classList.add('hidden');
+
+            try {
+                const formData = new URLSearchParams();
+                formData.append('username', email);
+                formData.append('password', password);
+
+                const res = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData
+                });
+
+                if (!res.ok) {
+                    const data = await res.json();
+                    throw new Error(data.detail || 'Credenciales inválidas');
+                }
+
+                const data = await res.json();
+                if (data.user && data.user.role !== 'admin') {
+                    throw new Error('Esta cuenta no posee rol de Administrador');
+                }
+
+                authToken = data.access_token;
+                localStorage.setItem('admin_token', authToken);
+                localStorage.setItem('admin_user', JSON.stringify(data.user));
+
+                showDashboard();
+            } catch (err) {
+                errDiv.textContent = err.message;
+                errDiv.classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('admin_token');
+            localStorage.removeItem('admin_user');
+            authToken = '';
+            showLogin();
+        }
+
+        async function apiFetch(endpoint, options = {}) {
+            options.headers = options.headers || {};
+            options.headers['Authorization'] = `Bearer ${authToken}`;
+            if (!(options.body instanceof FormData) && !options.headers['Content-Type']) {
+                options.headers['Content-Type'] = 'application/json';
+            }
+
+            const res = await fetch(`${API_BASE}${endpoint}`, options);
+            if (res.status === 401 || res.status === 403) {
+                logout();
+                throw new Error('Sesión expirada');
+            }
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({ detail: 'Error en la solicitud' }));
+                throw new Error(err.detail || 'Error en la API');
+            }
+            return res.json();
+        }
+
+        async function verifyTokenAndLoad() {
+            try {
+                const user = await apiFetch('/auth/me');
+                if (user.role !== 'admin') {
+                    logout();
+                    return;
+                }
+                document.getElementById('adminUserName').textContent = user.full_name;
+                document.getElementById('adminUserEmail').textContent = user.email;
+                showDashboard();
+            } catch (e) {
+                logout();
+            }
+        }
+
+        // TABS
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-nav').forEach(el => {
+                el.classList.remove('bg-emerald-600/20', 'text-emerald-400', 'border', 'border-emerald-500/30');
+            });
+
+            document.getElementById(`tab-${tabId}-content`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.add('bg-emerald-600/20', 'text-emerald-400', 'border', 'border-emerald-500/30');
+            }
+        }
+
+        // DATA LOAD
+        async function loadAllData() {
+            loadVerifications();
+            loadPayments();
+            loadDisputes();
+            loadUsers();
+            loadCommissionAndBanks();
+            loadAdmins();
+        }
+
+        // VERIFICATIONS
+        async function loadVerifications() {
+            try {
+                const list = await apiFetch('/admin/verifications');
+                const pending = list.filter(v => v.status === 'pendiente');
+                
+                const badge = document.getElementById('badge-verifications');
+                badge.textContent = pending.length;
+                badge.classList.toggle('hidden', pending.length === 0);
+                document.getElementById('statPendingVerifications').textContent = pending.length;
+
+                const container = document.getElementById('verificationsList');
+                if (list.length === 0) {
+                    container.innerHTML = `<p class="text-slate-500 text-sm italic">No hay solicitudes de verificación.</p>`;
+                    return;
+                }
+
+                container.innerHTML = list.map(v => `
+                    <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <div class="flex items-center space-x-2 mb-1">
+                                <h4 class="font-bold text-white text-base">${v.full_name}</h4>
+                                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${v.status === 'aprobado' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : v.status === 'rechazado' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">${v.status}</span>
+                            </div>
+                            <p class="text-xs text-slate-400">Especialidad: <span class="text-slate-200 font-medium">${v.specialty}</span> | Cédula: <span class="text-slate-200 font-medium">${v.id_number}</span></p>
+                            <p class="text-xs text-slate-400 mt-1">Ubicación: ${v.province}, ${v.municipality}</p>
+                            ${v.document_url ? `<a href="${v.document_url}" target="_blank" class="inline-flex items-center space-x-1 text-xs text-emerald-400 hover:underline mt-2"><i class="fa-solid fa-file-pdf"></i><span>Ver Documento Adjunto</span></a>` : ''}
+                        </div>
+                        ${v.status === 'pendiente' ? `
+                            <div class="flex items-center space-x-2 w-full md:w-auto">
+                                <button onclick="approveVerification('${v.id}')" class="flex-1 md:flex-initial bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-xl text-xs transition-colors">Aprobar</button>
+                                <button onclick="rejectVerification('${v.id}')" class="flex-1 md:flex-initial bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 px-4 py-2 rounded-xl text-xs transition-colors">Rechazar</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function approveVerification(id) {
+            if (!confirm('¿Aprobar esta verificación técnico?')) return;
+            await apiFetch(`/admin/verifications/${id}/approve`, { method: 'PUT' });
+            loadVerifications();
+        }
+
+        async function rejectVerification(id) {
+            const reason = prompt('Motivo del rechazo:');
+            if (!reason) return;
+            await apiFetch(`/admin/verifications/${id}/reject`, {
+                method: 'PUT',
+                body: JSON.stringify({ rejection_reason: reason })
+            });
+            loadVerifications();
+        }
+
+        // PAYMENTS
+        async function loadPayments() {
+            try {
+                const list = await apiFetch('/admin/payments');
+                const pending = list.filter(p => p.status === 'comprobante_subido');
+
+                const badge = document.getElementById('badge-payments');
+                badge.textContent = pending.length;
+                badge.classList.toggle('hidden', pending.length === 0);
+
+                const container = document.getElementById('paymentsList');
+                if (list.length === 0) {
+                    container.innerHTML = `<p class="text-slate-500 text-sm italic">No hay registros de pagos.</p>`;
+                    return;
+                }
+
+                container.innerHTML = list.map(p => `
+                    <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <div class="flex items-center space-x-2 mb-1">
+                                <span class="font-bold text-white text-base">RD$ ${p.amount_rd.toLocaleString()}</span>
+                                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${p.status === 'verificado' ? 'bg-emerald-500/20 text-emerald-400' : p.status === 'comprobante_subido' ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-700 text-slate-300'}">${p.status}</span>
+                            </div>
+                            <p class="text-xs text-slate-400">Referencia: <span class="font-mono text-slate-200">${p.transfer_reference || 'N/A'}</span></p>
+                            ${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank" class="inline-flex items-center space-x-1 text-xs text-emerald-400 hover:underline mt-2"><i class="fa-solid fa-receipt"></i><span>Ver Comprobante Depósito</span></a>` : ''}
+                        </div>
+                        ${p.status === 'comprobante_subido' ? `
+                            <div class="flex items-center space-x-2">
+                                <button onclick="verifyPayment('${p.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-xl text-xs transition-colors">Validar Pago</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function verifyPayment(id) {
+            if (!confirm('¿Confirmar que el depósito bancario fue recibido en la cuenta de ServiYa?')) return;
+            await apiFetch(`/admin/payments/${id}/verify`, { method: 'PUT' });
+            loadPayments();
+        }
+
+        // DISPUTES & REPORTS
+        async function loadDisputes() {
+            try {
+                const disputes = await apiFetch('/reportes/disputas');
+                const reports = await apiFetch('/reportes/reportes');
+
+                const openDisputes = disputes.filter(d => d.status === 'abierta');
+                document.getElementById('badge-disputes').textContent = openDisputes.length;
+                document.getElementById('badge-disputes').classList.toggle('hidden', openDisputes.length === 0);
+                document.getElementById('statDisputes').textContent = openDisputes.length;
+
+                const dispContainer = document.getElementById('disputesList');
+                dispContainer.innerHTML = disputes.length === 0 ? `<p class="text-slate-500 text-sm italic">Sin disputas activas.</p>` : disputes.map(d => `
+                    <div class="bg-slate-800 border border-slate-700/70 p-4 rounded-xl space-y-2">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-white text-sm">${d.reason}</h4>
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${d.status === 'abierta' ? 'bg-rose-500/20 text-rose-300' : 'bg-slate-700 text-slate-300'}">${d.status}</span>
+                        </div>
+                        <p class="text-xs text-slate-300">${d.description}</p>
+                        ${d.status === 'abierta' ? `
+                            <button onclick="resolveDispute('${d.id}')" class="mt-2 w-full bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 py-1.5 rounded-lg text-xs font-semibold transition-colors">Intervenir & Resolver</button>
+                        ` : ''}
+                    </div>
+                `).join('');
+
+                const repContainer = document.getElementById('reportsList');
+                repContainer.innerHTML = reports.length === 0 ? `<p class="text-slate-500 text-sm italic">Sin reportes registrados.</p>` : reports.map(r => `
+                    <div class="bg-slate-800 border border-slate-700/70 p-4 rounded-xl space-y-2">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-white text-sm">${r.reason}</h4>
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">${r.status}</span>
+                        </div>
+                        <p class="text-xs text-slate-300">${r.description}</p>
+                    </div>
+                `).join('');
+
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function resolveDispute(id) {
+            const notes = prompt('Notas de resolución/arbitraje:');
+            if (!notes) return;
+            await apiFetch(`/reportes/disputas/${id}/resolver`, {
+                method: 'POST',
+                body: JSON.stringify({ resolution_notes: notes })
+            });
+            loadDisputes();
+        }
+
+        // USERS
+        async function loadUsers() {
+            try {
+                const role = document.getElementById('userRoleFilter').value;
+                const users = await apiFetch(`/admin/users${role ? `?role=${role}` : ''}`);
+
+                document.getElementById('statTotalUsers').textContent = users.length;
+
+                const tbody = document.getElementById('usersTableBody');
+                tbody.innerHTML = users.map(u => `
+                    <tr class="hover:bg-slate-700/30 transition-colors">
+                        <td class="p-4">
+                            <p class="font-bold text-white">${u.full_name}</p>
+                            <p class="text-xs text-slate-400">${u.email}</p>
+                        </td>
+                        <td class="p-4">
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${u.role === 'admin' ? 'bg-purple-500/20 text-purple-300' : u.role === 'tecnico' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-blue-500/20 text-blue-300'}">${u.role}</span>
+                        </td>
+                        <td class="p-4 text-xs text-slate-300">${u.province || 'N/A'}</td>
+                        <td class="p-4">
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${u.is_verified ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-700 text-slate-400'}">${u.is_verified ? 'Verificado' : 'No Verificado'}</span>
+                        </td>
+                        <td class="p-4">
+                            ${u.role !== 'admin' ? `
+                                <button onclick="toggleSuspend('${u.id}', ${!u.is_suspended})" class="text-xs ${u.is_suspended ? 'text-emerald-400 hover:underline' : 'text-rose-400 hover:underline'}">${u.is_suspended ? 'Reactivar' : 'Suspender'}</button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function toggleSuspend(userId, suspend) {
+            if (!confirm(`¿Desea ${suspend ? 'suspender' : 'reactivar'} este usuario?`)) return;
+            await apiFetch(`/admin/users/${userId}/suspend?suspend=${suspend}`, { method: 'PUT' });
+            loadUsers();
+        }
+
+        // COMMISSION & BANKS
+        async function loadCommissionAndBanks() {
+            try {
+                const comm = await apiFetch('/admin/config/commission');
+                document.getElementById('commissionInput').value = comm.platform_commission_rate;
+                document.getElementById('statCommission').textContent = comm.percentage;
+
+                const banks = await apiFetch('/admin/bank-accounts');
+                const container = document.getElementById('bankAccountsList');
+                container.innerHTML = banks.map(b => `
+                    <div class="bg-slate-900 border border-slate-700 p-4 rounded-xl flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold text-white text-sm">${b.bank_name}</h4>
+                            <p class="text-xs text-slate-400">${b.account_type} | <span class="font-mono text-slate-200">${b.account_number}</span></p>
+                            <p class="text-xs text-slate-400">Titular: ${b.account_holder} (RNC/Cédula: ${b.rnc_or_cedula || 'N/A'})</p>
+                        </div>
+                        <span class="text-[10px] uppercase font-bold px-2.5 py-1 rounded-full ${b.is_active ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-700 text-slate-400'}">${b.is_active ? 'Cuenta Activa' : 'Inactiva'}</span>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function handleUpdateCommission(e) {
+            e.preventDefault();
+            const val = parseFloat(document.getElementById('commissionInput').value);
+            await apiFetch('/admin/config/commission', {
+                method: 'PUT',
+                body: JSON.stringify({ commission_rate: val })
+            });
+            alert('Tasa de comisión actualizada exitosamente');
+            loadCommissionAndBanks();
+        }
+
+        // ADMINS
+        async function loadAdmins() {
+            try {
+                const admins = await apiFetch('/admin/administradores');
+                const container = document.getElementById('adminsList');
+                container.innerHTML = admins.map(a => `
+                    <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl flex justify-between items-center">
+                        <div>
+                            <p class="font-bold text-white text-sm">${a.full_name}</p>
+                            <p class="text-xs text-slate-400">${a.email}</p>
+                        </div>
+                        <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">ADMIN</span>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function handleCreateAdmin(e) {
+            e.preventDefault();
+            const full_name = document.getElementById('adminFullName').value.trim();
+            const email = document.getElementById('adminEmail').value.trim();
+            const phone = document.getElementById('adminPhone').value.trim();
+            const password = document.getElementById('adminPassword').value.trim();
+
+            try {
+                await apiFetch('/admin/administradores', {
+                    method: 'POST',
+                    body: JSON.stringify({ full_name, email, phone, password })
+                });
+                alert('Administrador creado exitosamente');
+                document.getElementById('createAdminForm').reset();
+                loadAdmins();
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+    </script>
+</body>
+</html>

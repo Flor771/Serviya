@@ -1,6 +1,6 @@
 {
-  "name": "CHAMBA RD",
-  "description": "Plataforma nativa para conectar clientes y trabajadores en República Dominicana. Publica tu chamba. Encuentra quién la haga.",
+  "name": "ServiYa",
+  "description": "Plataforma nativa para conectar clientes y servicios profesionales en República Dominicana. Publica tu solicitud o encuentra profesionales al instante.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
