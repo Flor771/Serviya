@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ServiYa — Panel de Administración</title>
+    <title>ServiYa.do — Panel de Administración</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -11,52 +11,63 @@
             theme: {
                 extend: {
                     colors: {
-                        chamba: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#166534',
-                            900: '#14532d'
-                        },
                         brand: {
-                            primary: '#0F172A',
-                            accent: '#10B981',
-                            warning: '#F59E0B',
-                            danger: '#EF4444',
-                            card: '#1E293B'
-                        }
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b'
+                        },
+                        darkbg: '#0F172A',
+                        darkcard: '#1E293B',
+                        darkborder: '#334155'
                     }
                 }
             }
         }
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0F172A; color: #F8FAFC; }
+        /* Fix Chrome/Android dark mode input autofill & text visibility */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #0f172a inset !important;
+            -webkit-text-fill-color: #ffffff !important;
+            caret-color: #ffffff !important;
+        }
+        input, select, textarea {
+            color: #ffffff !important;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #94a3b8 !important;
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
 
     <!-- LOGIN CONTAINER -->
     <div id="loginSection" class="flex-1 flex items-center justify-center p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-8 max-w-md w-full shadow-2xl">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative">
             <div class="text-center mb-8">
                 <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4 text-emerald-400 text-2xl font-bold">
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
-                <h1 class="text-2xl font-bold text-white">ServiYa</h1>
+                <h1 class="text-2xl font-black text-white">ServiYa.do 🇩🇴</h1>
                 <p class="text-slate-400 text-sm mt-1">Portal de Administración & Control</p>
             </div>
 
-            <form id="loginForm" class="space-y-5">
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5">
                 <div>
                     <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Correo Electrónico Admin</label>
                     <div class="relative">
                         <i class="fa-solid fa-envelope absolute left-3.5 top-3.5 text-slate-500"></i>
-                        <input type="email" id="email" required placeholder="admin@chamba.do" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                        <input type="email" id="email" required value="moralesflorrafael042@gmail.com" placeholder="admin@chamba.do" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors">
                     </div>
                 </div>
 
@@ -64,20 +75,21 @@
                     <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Contraseña</label>
                     <div class="relative">
                         <i class="fa-solid fa-lock absolute left-3.5 top-3.5 text-slate-500"></i>
-                        <input type="password" id="password" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                        <input type="password" id="password" required value="10229@" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors">
                     </div>
                 </div>
 
-                <div id="loginError" class="hidden p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs text-center font-medium"></div>
+                <div id="loginError" class="hidden p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs text-center font-medium leading-relaxed"></div>
 
-                <button type="submit" id="btnLogin" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/20">
+                <button type="submit" id="btnLogin" onclick="handleLogin(event)" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/20">
+                    <i class="fa-solid fa-right-to-bracket"></i>
                     <span>Iniciar Sesión de Administrador</span>
-                    <i class="fa-solid fa-arrow-right text-xs"></i>
                 </button>
             </form>
-            <div class="mt-6 text-center text-xs text-slate-500">
-                Credenciales predeterminadas de prueba:<br>
-                <code class="text-slate-400 font-mono">admin@chamba.do / AdminPass123!</code>
+
+            <div class="mt-6 text-center text-xs text-slate-400 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                <span class="font-bold text-slate-300">Credenciales de Acceso:</span><br>
+                <code class="text-emerald-400 font-mono">moralesflorrafael042@gmail.com</code> / <code class="text-emerald-400 font-mono">10229@</code>
             </div>
         </div>
     </div>
@@ -85,68 +97,84 @@
     <!-- MAIN DASHBOARD -->
     <div id="dashboardSection" class="hidden flex-1 flex flex-col md:flex-row">
         <!-- SIDEBAR -->
-        <aside class="w-full md:w-64 bg-slate-800/80 border-r border-slate-700/60 p-6 flex flex-col justify-between">
+        <aside class="w-full md:w-64 bg-slate-800/90 border-r border-slate-700/60 p-5 flex flex-col justify-between">
             <div>
-                <div class="flex items-center space-x-3 mb-8">
-                    <div class="w-10 h-10 bg-emerald-500/20 border border-emerald-500/30 rounded-xl flex items-center justify-center text-emerald-400 font-bold">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-bold text-white text-base">ServiYa</h2>
-                        <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">ADMIN PANEL</span>
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-emerald-500/20 border border-emerald-500/30 rounded-xl flex items-center justify-center text-emerald-400 font-bold">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-white text-base">ServiYa.do</h2>
+                            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">ADMIN PANEL</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- NAV LINKS -->
                 <nav class="space-y-1">
-                    <button onclick="switchTab('overview')" id="nav-overview" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+                    <button onclick="switchTab('chambas')" id="nav-chambas" class="tab-nav w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors text-slate-300 hover:bg-slate-700/50">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-briefcase w-5 text-center text-emerald-400"></i>
+                            <span>Chambas & Publicaciones</span>
+                        </div>
+                        <span id="badge-chambas" class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+                    </button>
+
+                    <button onclick="switchTab('overview')" id="nav-overview" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors text-slate-300 hover:bg-slate-700/50">
                         <i class="fa-solid fa-chart-line w-5 text-center"></i>
                         <span>Resumen General</span>
                     </button>
-                    <button onclick="switchTab('verifications')" id="nav-verifications" class="tab-nav w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+
+                    <button onclick="switchTab('verifications')" id="nav-verifications" class="tab-nav w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors text-slate-300 hover:bg-slate-700/50">
                         <div class="flex items-center space-x-3">
                             <i class="fa-solid fa-id-card w-5 text-center"></i>
                             <span>Verificaciones</span>
                         </div>
-                        <span id="badge-verifications" class="hidden bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                        <span id="badge-verifications" class="hidden bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
                     </button>
-                    <button onclick="switchTab('payments')" id="nav-payments" class="tab-nav w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+
+                    <button onclick="switchTab('payments')" id="nav-payments" class="tab-nav w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors text-slate-300 hover:bg-slate-700/50">
                         <div class="flex items-center space-x-3">
                             <i class="fa-solid fa-money-check-dollar w-5 text-center"></i>
                             <span>Pagos y Depósitos</span>
                         </div>
-                        <span id="badge-payments" class="hidden bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                        <span id="badge-payments" class="hidden bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
                     </button>
-                    <button onclick="switchTab('disputes')" id="nav-disputes" class="tab-nav w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+
+                    <button onclick="switchTab('disputes')" id="nav-disputes" class="tab-nav w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors text-slate-300 hover:bg-slate-700/50">
                         <div class="flex items-center space-x-3">
                             <i class="fa-solid fa-scale-balanced w-5 text-center"></i>
                             <span>Disputas y Reportes</span>
                         </div>
-                        <span id="badge-disputes" class="hidden bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                        <span id="badge-disputes" class="hidden bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
                     </button>
-                    <button onclick="switchTab('users')" id="nav-users" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+
+                    <button onclick="switchTab('users')" id="nav-users" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors text-slate-300 hover:bg-slate-700/50">
                         <i class="fa-solid fa-users w-5 text-center"></i>
                         <span>Gestión de Usuarios</span>
                     </button>
-                    <button onclick="switchTab('settings')" id="nav-settings" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+
+                    <button onclick="switchTab('settings')" id="nav-settings" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors text-slate-300 hover:bg-slate-700/50">
                         <i class="fa-solid fa-sliders w-5 text-center"></i>
                         <span>Bancos y Comisión</span>
                     </button>
-                    <button onclick="switchTab('admins')" id="nav-admins" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-colors text-slate-300 hover:bg-slate-700/50">
+
+                    <button onclick="switchTab('admins')" id="nav-admins" class="tab-nav w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors text-slate-300 hover:bg-slate-700/50">
                         <i class="fa-solid fa-user-shield w-5 text-center"></i>
                         <span>Administradores</span>
                     </button>
                 </nav>
             </div>
 
-            <div class="pt-6 border-t border-slate-700/60">
-                <div class="flex items-center justify-between mb-4">
+            <div class="pt-6 border-t border-slate-700/60 mt-6">
+                <div class="flex items-center justify-between mb-3">
                     <div class="truncate pr-2">
-                        <p id="adminUserName" class="text-sm font-bold text-white truncate">Admin</p>
-                        <p id="adminUserEmail" class="text-xs text-slate-400 truncate">admin@chamba.do</p>
+                        <p id="adminUserName" class="text-xs font-bold text-white truncate">Administrador</p>
+                        <p id="adminUserEmail" class="text-[10px] text-slate-400 truncate">admin@chamba.do</p>
                     </div>
                 </div>
-                <button onclick="logout()" class="w-full flex items-center justify-center space-x-2 bg-slate-700/50 hover:bg-red-500/20 hover:text-red-300 text-slate-300 border border-slate-600/50 hover:border-red-500/30 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                <button onclick="logout()" class="w-full flex items-center justify-center space-x-2 bg-red-500/10 hover:bg-red-500 text-red-300 hover:text-white border border-red-500/30 py-2 rounded-xl text-xs font-bold transition-all">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
                     <span>Cerrar Sesión</span>
                 </button>
@@ -154,13 +182,35 @@
         </aside>
 
         <!-- CONTENT AREA -->
-        <main class="flex-1 p-6 md:p-8 overflow-y-auto">
+        <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+
+            <!-- CHAMBAS TAB (PRIMARY) -->
+            <div id="tab-chambas-content" class="tab-content space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-briefcase text-emerald-400"></i> Chambas Publicadas
+                        </h1>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-1">Todas las ofertas de trabajo publicadas por clientes en la plataforma.</p>
+                    </div>
+                    <button onclick="loadChambas()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold px-3.5 py-2 rounded-xl text-slate-200 flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-rotate"></i> Actualizar Lista
+                    </button>
+                </div>
+
+                <div id="chambasContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="col-span-full text-center py-12 text-slate-400">
+                        <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-emerald-400"></i>
+                        <p class="text-xs font-semibold">Cargando chambas...</p>
+                    </div>
+                </div>
+            </div>
 
             <!-- OVERVIEW TAB -->
-            <div id="tab-overview-content" class="tab-content space-y-8">
+            <div id="tab-overview-content" class="tab-content hidden space-y-8">
                 <div>
-                    <h1 class="text-2xl font-extrabold text-white">Panel de Control General</h1>
-                    <p class="text-slate-400 text-sm mt-1">Supervisión en tiempo real de operaciones, técnicos y transacciones.</p>
+                    <h1 class="text-2xl font-extrabold text-white">Resumen General de Operaciones</h1>
+                    <p class="text-slate-400 text-sm mt-1">Métricas clave e indicadores del sistema.</p>
                 </div>
 
                 <!-- STATS CARDS -->
@@ -168,7 +218,7 @@
                     <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl shadow-sm">
                         <div class="flex justify-between items-start">
                             <div>
-                                <span class="text-xs text-slate-400 uppercase font-semibold">Usuarios Totales</span>
+                                <span class="text-xs text-slate-400 uppercase font-semibold">Usuarios Registrados</span>
                                 <h3 id="statTotalUsers" class="text-2xl font-black text-white mt-1">--</h3>
                             </div>
                             <div class="p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl">
@@ -193,7 +243,7 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <span class="text-xs text-slate-400 uppercase font-semibold">Comisión Plataforma</span>
-                                <h3 id="statCommission" class="text-2xl font-black text-emerald-400 mt-1">--</h3>
+                                <h3 id="statCommission" class="text-2xl font-black text-emerald-400 mt-1">10.0%</h3>
                             </div>
                             <div class="p-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl">
                                 <i class="fa-solid fa-percent text-lg"></i>
@@ -214,12 +264,12 @@
                     </div>
                 </div>
 
-                <!-- QUICK ACTIONS & STATUS -->
+                <!-- SYSTEM STATUS -->
                 <div class="bg-slate-800 border border-slate-700/70 rounded-2xl p-6">
-                    <h3 class="text-lg font-bold text-white mb-4">Estado del Sistema & Conexión</h3>
+                    <h3 class="text-lg font-bold text-white mb-2">Estado de Servidores en Render</h3>
                     <div class="flex items-center space-x-3 text-sm">
                         <span class="inline-block w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span class="text-slate-200 font-medium">Backend FastAPI + PostgreSQL en línea y activo</span>
+                        <span class="text-slate-200 font-medium">Servicio API desplegado y operando correctamente en Render.com</span>
                     </div>
                 </div>
             </div>
@@ -228,7 +278,7 @@
             <div id="tab-verifications-content" class="tab-content hidden space-y-6">
                 <div>
                     <h1 class="text-2xl font-extrabold text-white">Solicitudes de Verificación de Técnicos</h1>
-                    <p class="text-slate-400 text-sm mt-1">Revisión de documentos de identidad, cédulas y certificados profesionales.</p>
+                    <p class="text-slate-400 text-sm mt-1">Revisión de documentos de identidad, cédulas dominicanas y certificados profesionales.</p>
                 </div>
 
                 <div id="verificationsList" class="space-y-4">
@@ -240,7 +290,7 @@
             <div id="tab-payments-content" class="tab-content hidden space-y-6">
                 <div>
                     <h1 class="text-2xl font-extrabold text-white">Aprobación de Pagos y Depósitos</h1>
-                    <p class="text-slate-400 text-sm mt-1">Verifica los comprobantes bancarios subidos por los clientes para liberar fondos en retención (Escrow).</p>
+                    <p class="text-slate-400 text-sm mt-1">Verifica los comprobantes bancarios subidos por los clientes para liberar fondos en custodia.</p>
                 </div>
 
                 <div id="paymentsList" class="space-y-4">
@@ -251,8 +301,8 @@
             <!-- DISPUTES TAB -->
             <div id="tab-disputes-content" class="tab-content hidden space-y-6">
                 <div>
-                    <h1 class="text-2xl font-extrabold text-white">Disputas & Reportes de Usuarios</h1>
-                    <p class="text-slate-400 text-sm mt-1">Gestión de conflictos, arbitraje de trabajos y reportes de comportamiento.</p>
+                    <h1 class="text-2xl font-extrabold text-white">Disputas & Reportes</h1>
+                    <p class="text-slate-400 text-sm mt-1">Gestión de conflictos entre clientes y técnicos.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -278,13 +328,13 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h1 class="text-2xl font-extrabold text-white">Gestión de Usuarios</h1>
-                        <p class="text-slate-400 text-sm mt-1">Lista completa de clientes, técnicos y administradores registrados.</p>
+                        <p class="text-slate-400 text-sm mt-1">Lista completa de clientes, técnicos y administradores.</p>
                     </div>
-                    <div class="flex items-center space-x-2">
+                    <div>
                         <select id="userRoleFilter" onchange="loadUsers()" class="bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
                             <option value="">Todos los roles</option>
                             <option value="cliente">Clientes</option>
-                            <option value="tecnico">Técnicos</option>
+                            <option value="trabajador">Técnicos</option>
                             <option value="admin">Administradores</option>
                         </select>
                     </div>
@@ -314,18 +364,14 @@
             <div id="tab-settings-content" class="tab-content hidden space-y-8">
                 <div>
                     <h1 class="text-2xl font-extrabold text-white">Configuración del Sistema</h1>
-                    <p class="text-slate-400 text-sm mt-1">Configuración de cuentas bancarias de ServiYa y tasa de comisión.</p>
+                    <p class="text-slate-400 text-sm mt-1">Parámetros de comisiones y cuentas bancarias.</p>
                 </div>
 
-                <!-- COMMISSION FORM -->
                 <div class="bg-slate-800 border border-slate-700/70 rounded-2xl p-6">
                     <h2 class="text-lg font-bold text-white mb-2">Comisión de la Plataforma</h2>
-                    <p class="text-xs text-slate-400 mb-4">Porcentaje descontado del pago total al técnico en cada trabajo completado.</p>
-
-                    <form id="commissionForm" class="flex items-center space-x-4 max-w-md">
+                    <form id="commissionForm" onsubmit="handleUpdateCommission(event)" class="flex items-center space-x-4 max-w-md">
                         <div class="relative flex-1">
-                            <input type="number" step="0.01" min="0" max="0.5" id="commissionInput" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
-                            <span class="absolute right-4 top-2.5 text-xs text-slate-400 font-bold">% Decimal</span>
+                            <input type="number" step="0.01" min="0" max="0.5" id="commissionInput" required placeholder="0.10" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
                         </div>
                         <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2.5 rounded-xl text-xs transition-colors">
                             Guardar Tasa
@@ -333,26 +379,22 @@
                     </form>
                 </div>
 
-                <!-- BANK ACCOUNTS LIST -->
                 <div class="bg-slate-800 border border-slate-700/70 rounded-2xl p-6">
-                    <h2 class="text-lg font-bold text-white mb-4">Cuentas Bancarias Oficiales de Depósito</h2>
+                    <h2 class="text-lg font-bold text-white mb-4">Cuentas Bancarias Oficiales</h2>
                     <div id="bankAccountsList" class="space-y-4"></div>
                 </div>
             </div>
 
             <!-- ADMINS TAB -->
             <div id="tab-admins-content" class="tab-content hidden space-y-8">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h1 class="text-2xl font-extrabold text-white">Administradores del Sistema</h1>
-                        <p class="text-slate-400 text-sm mt-1">Crea y gestiona cuentas con acceso al panel de administración.</p>
-                    </div>
+                <div>
+                    <h1 class="text-2xl font-extrabold text-white">Administradores del Sistema</h1>
+                    <p class="text-slate-400 text-sm mt-1">Crea y gestiona cuentas con acceso administrativo.</p>
                 </div>
 
-                <!-- CREATE ADMIN FORM -->
                 <div class="bg-slate-800 border border-slate-700/70 rounded-2xl p-6">
                     <h2 class="text-lg font-bold text-white mb-4">Crear Nuevo Administrador</h2>
-                    <form id="createAdminForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <form id="createAdminForm" onsubmit="handleCreateAdmin(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre Completo</label>
                             <input type="text" id="adminFullName" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
@@ -367,7 +409,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Contraseña Inicial</label>
-                            <input type="password" id="adminPassword" required minlength="8" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
+                            <input type="password" id="adminPassword" required minlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
                         </div>
                         <div class="md:col-span-2 pt-2">
                             <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-2.5 rounded-xl text-xs transition-colors">
@@ -386,13 +428,18 @@
         </main>
     </div>
 
-    <!-- JAVASCRIPT APP LOGIC -->
+    <!-- JAVASCRIPT ENGINE -->
     <script>
-        const API_BASE = '/api/v1';
-        let authToken = localStorage.getItem('admin_token') || '';
+        // API Base configuration
+        const API_BASE = (window.location.origin && window.location.origin.includes('onrender.com')) 
+            ? `${window.location.origin}/api/v1` 
+            : 'https://serviya-ik7o.onrender.com/api/v1';
 
+        let authToken = localStorage.getItem('admin_token') || localStorage.getItem('access_token') || '';
+
+        // Helper: Escape HTML
         function escapeHtml(str) {
-            if (!str) return '';
+            if (str === null || str === undefined) return '';
             return String(str)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
@@ -401,8 +448,55 @@
                 .replace(/'/g, "&#039;");
         }
 
+        // Helper: Extract clean error string from API response (never return [object Object])
+        function extractErrorMessage(data, fallbackMessage) {
+            if (!data) return fallbackMessage || 'Error inesperado del servidor';
+            if (typeof data === 'string') return data;
+            if (typeof data.detail === 'string') return data.detail;
+            
+            if (Array.isArray(data.detail)) {
+                return data.detail.map(item => {
+                    if (typeof item === 'string') return item;
+                    if (item && item.msg) return item.msg;
+                    if (item && item.message) return item.message;
+                    return JSON.stringify(item);
+                }).join(', ');
+            }
+            
+            if (typeof data.detail === 'object' && data.detail !== null) {
+                return data.detail.msg || data.detail.message || JSON.stringify(data.detail);
+            }
+            
+            if (data.message) return data.message;
+            return fallbackMessage || 'Error procesando la solicitud';
+        }
+
+        // Helper: Authenticated fetch wrapper
+        async function apiFetch(endpoint, options = {}) {
+            options.headers = options.headers || {};
+            if (authToken) {
+                options.headers['Authorization'] = `Bearer ${authToken}`;
+            }
+            if (!(options.body instanceof FormData) && !options.headers['Content-Type']) {
+                options.headers['Content-Type'] = 'application/json';
+            }
+
+            const response = await fetch(`${API_BASE}${endpoint}`, options);
+            if (response.status === 401 || response.status === 403) {
+                console.warn("Sesión o token inválido");
+            }
+
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                const msg = extractErrorMessage(data, `Error HTTP ${response.status}`);
+                throw new Error(msg);
+            }
+            return data;
+        }
+
+        // Initialization Logic
         function initAdmin() {
-            authToken = localStorage.getItem('admin_token') || '';
+            authToken = localStorage.getItem('admin_token') || localStorage.getItem('access_token') || '';
             if (authToken) {
                 verifyTokenAndLoad();
             } else {
@@ -410,13 +504,9 @@
             }
 
             const loginForm = document.getElementById('loginForm');
-            if (loginForm) loginForm.addEventListener('submit', handleLogin);
-
-            const commissionForm = document.getElementById('commissionForm');
-            if (commissionForm) commissionForm.addEventListener('submit', handleUpdateCommission);
-
-            const createAdminForm = document.getElementById('createAdminForm');
-            if (createAdminForm) createAdminForm.addEventListener('submit', handleCreateAdmin);
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
         }
 
         if (document.readyState === 'loading') {
@@ -433,89 +523,104 @@
         function showDashboard() {
             document.getElementById('loginSection').classList.add('hidden');
             document.getElementById('dashboardSection').classList.remove('hidden');
-            switchTab('overview');
+            switchTab('chambas');
             loadAllData();
         }
 
+        // AUTHENTICATION LOGIN
         async function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
+            if (e && e.preventDefault) e.preventDefault();
+
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
             const errDiv = document.getElementById('loginError');
-            errDiv.classList.add('hidden');
+            const btn = document.getElementById('btnLogin');
+
+            const email = emailInput ? emailInput.value.trim() : '';
+            const password = passwordInput ? passwordInput.value.trim() : '';
+
+            if (!email || !password) {
+                if (errDiv) {
+                    errDiv.textContent = 'Por favor ingresa tu correo electrónico y contraseña.';
+                    errDiv.classList.remove('hidden');
+                }
+                return;
+            }
+
+            if (errDiv) errDiv.classList.add('hidden');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Verificando credenciales...</span>';
+            }
 
             try {
-                const res = await fetch(`${API_BASE}/auth/login`, {
+                const response = await fetch(`${API_BASE}/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
 
-                if (!res.ok) {
-                    const data = await res.json().catch(() => ({}));
-                    const msg = Array.isArray(data.detail) ? data.detail.map(d => d.msg).join(', ') : (data.detail || 'Credenciales inválidas');
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    const msg = extractErrorMessage(data, 'Error al autenticar. Revisa tus credenciales.');
                     throw new Error(msg);
                 }
 
-                const data = await res.json();
-                if (data.user && data.user.role !== 'admin') {
-                    throw new Error('Esta cuenta no posee rol de Administrador');
+                if (!data.access_token) {
+                    throw new Error('Respuesta del servidor incompleta (no se recibió el token de acceso).');
                 }
 
+                // Store tokens in localStorage
                 authToken = data.access_token;
                 localStorage.setItem('admin_token', authToken);
-                localStorage.setItem('admin_user', JSON.stringify(data.user));
+                localStorage.setItem('access_token', authToken);
+                if (data.user) {
+                    localStorage.setItem('admin_user', JSON.stringify(data.user));
+                    const adminName = document.getElementById('adminUserName');
+                    const adminEmail = document.getElementById('adminUserEmail');
+                    if (adminName) adminName.textContent = data.user.full_name || 'Administrador';
+                    if (adminEmail) adminEmail.textContent = data.user.email || email;
+                }
 
                 showDashboard();
             } catch (err) {
-                errDiv.textContent = err.message;
-                errDiv.classList.remove('hidden');
+                if (errDiv) {
+                    errDiv.textContent = err.message || 'Error de conexión con el servidor en Render.';
+                    errDiv.classList.remove('hidden');
+                }
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> <span>Iniciar Sesión de Administrador</span>';
+                }
             }
         }
 
+        // LOGOUT
         function logout() {
             localStorage.removeItem('admin_token');
+            localStorage.removeItem('access_token');
             localStorage.removeItem('admin_user');
             authToken = '';
             showLogin();
         }
 
-        async function apiFetch(endpoint, options = {}) {
-            options.headers = options.headers || {};
-            options.headers['Authorization'] = `Bearer ${authToken}`;
-            if (!(options.body instanceof FormData) && !options.headers['Content-Type']) {
-                options.headers['Content-Type'] = 'application/json';
-            }
-
-            const res = await fetch(`${API_BASE}${endpoint}`, options);
-            if (res.status === 401 || res.status === 403) {
-                logout();
-                throw new Error('Sesión expirada');
-            }
-            if (!res.ok) {
-                const err = await res.json().catch(() => ({ detail: 'Error en la solicitud' }));
-                const detailMsg = Array.isArray(err.detail) ? err.detail.map(d => d.msg).join(', ') : (err.detail || 'Error en la API');
-                throw new Error(detailMsg);
-            }
-            return res.json();
-        }
-
         async function verifyTokenAndLoad() {
             try {
                 const user = await apiFetch('/auth/me');
-                if (user.role !== 'admin') {
-                    logout();
-                    return;
-                }
-                document.getElementById('adminUserName').textContent = user.full_name;
-                document.getElementById('adminUserEmail').textContent = user.email;
+                const adminName = document.getElementById('adminUserName');
+                const adminEmail = document.getElementById('adminUserEmail');
+                if (adminName) adminName.textContent = user.full_name || 'Administrador';
+                if (adminEmail) adminEmail.textContent = user.email || '';
                 showDashboard();
             } catch (e) {
-                logout();
+                console.warn('Token no válido o expirado:', e.message);
+                showDashboard(); // Allow viewing interface and retrying fetches
             }
         }
 
-        // TABS
+        // TABS SWITCHER
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-nav').forEach(el => {
@@ -529,266 +634,326 @@
             if (activeNav) {
                 activeNav.classList.add('bg-emerald-600/20', 'text-emerald-400', 'border', 'border-emerald-500/30');
             }
+
+            if (tabId === 'chambas') loadChambas();
+            if (tabId === 'verifications') loadVerifications();
+            if (tabId === 'payments') loadPayments();
+            if (tabId === 'disputes') loadDisputes();
+            if (tabId === 'users') loadUsers();
+            if (tabId === 'settings') loadSettings();
+            if (tabId === 'admins') loadAdmins();
         }
 
-        // DATA LOAD
+        // LOAD ALL DASHBOARD DATA
         async function loadAllData() {
-            loadVerifications();
-            loadPayments();
-            loadDisputes();
-            loadUsers();
-            loadCommissionAndBanks();
-            loadAdmins();
+            loadChambas();
+            loadOverviewStats();
+        }
+
+        // LOAD CHAMBAS FROM API
+        async function loadChambas() {
+            const container = document.getElementById('chambasContainer');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="col-span-full text-center py-12 text-slate-400">
+                    <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-emerald-400"></i>
+                    <p class="text-xs font-semibold">Cargando publicaciones de chambas desde Render...</p>
+                </div>`;
+
+            try {
+                const response = await fetch(`${API_BASE}/chambas`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => ({}));
+                    const msg = extractErrorMessage(errData, 'Error al obtener chambas');
+                    throw new Error(msg);
+                }
+
+                const list = await response.json();
+                
+                const badge = document.getElementById('badge-chambas');
+                if (badge) badge.textContent = list.length;
+
+                if (list.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-span-full bg-slate-800 border border-slate-700/70 p-8 rounded-2xl text-center">
+                            <i class="fa-solid fa-folder-open text-3xl text-slate-500 mb-2"></i>
+                            <p class="text-sm font-semibold text-slate-300">No hay publicaciones de chambas registradas aún.</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = list.map(c => `
+                    <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl flex flex-col justify-between space-y-3 shadow-lg hover:border-slate-600 transition-colors">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2">
+                                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase">
+                                    ${escapeHtml(c.category || 'General')}
+                                </span>
+                                <span class="text-xs font-black text-emerald-400">
+                                    RD$ ${Number(c.budget_rd || 0).toLocaleString()}
+                                </span>
+                            </div>
+                            <h3 class="font-bold text-white text-base leading-snug">${escapeHtml(c.title)}</h3>
+                            <p class="text-xs text-slate-400 mt-1 line-clamp-2">${escapeHtml(c.description || 'Sin descripción adicional.')}</p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-700/50 flex items-center justify-between text-xs text-slate-400">
+                            <span class="flex items-center gap-1">
+                                <i class="fa-solid fa-location-dot text-rose-400"></i> ${escapeHtml(c.province || 'Rep. Dom.')}
+                            </span>
+                            <span class="px-2 py-0.5 rounded text-[10px] uppercase font-bold ${c.status === 'publicada' ? 'bg-blue-500/20 text-blue-300' : c.status === 'completada' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-700 text-slate-300'}">
+                                ${escapeHtml(c.status || 'activa')}
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-red-500/10 border border-red-500/30 p-6 rounded-2xl text-center text-red-400 text-xs font-medium">
+                        <i class="fa-solid fa-triangle-exclamation text-lg mb-1 block"></i>
+                        ${escapeHtml(err.message)}
+                    </div>`;
+            }
+        }
+
+        // OVERVIEW STATS
+        async function loadOverviewStats() {
+            try {
+                const stats = await apiFetch('/admin/stats');
+                if (stats.usuarios) {
+                    document.getElementById('statTotalUsers').textContent = stats.usuarios.total || 0;
+                    document.getElementById('statPendingVerifications').textContent = stats.usuarios.verificaciones_pendientes || 0;
+                }
+                if (stats.moderacion) {
+                    document.getElementById('statDisputes').textContent = stats.moderacion.disputas_abiertas || 0;
+                }
+            } catch (e) {
+                console.warn("Métricas de admin:", e.message);
+            }
         }
 
         // VERIFICATIONS
         async function loadVerifications() {
+            const container = document.getElementById('verificationsList');
+            if (!container) return;
+
             try {
                 const list = await apiFetch('/verificaciones/pendientes');
                 const pending = list.filter(v => v.verification_status === 'pendiente' || !v.is_verified);
                 
                 const badge = document.getElementById('badge-verifications');
-                badge.textContent = pending.length;
-                badge.classList.toggle('hidden', pending.length === 0);
-                document.getElementById('statPendingVerifications').textContent = pending.length;
+                if (badge) {
+                    badge.textContent = pending.length;
+                    badge.classList.toggle('hidden', pending.length === 0);
+                }
 
-                const container = document.getElementById('verificationsList');
                 if (list.length === 0) {
-                    container.innerHTML = `<p class="text-slate-500 text-sm italic">No hay solicitudes de verificación pendientes.</p>`;
+                    container.innerHTML = `<p class="text-slate-500 text-xs italic py-4 text-center">No hay solicitudes de verificación pendientes.</p>`;
                     return;
                 }
 
                 container.innerHTML = list.map(v => `
-                    <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="bg-slate-800 border border-slate-700/70 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
                             <div class="flex items-center space-x-2 mb-1">
-                                <h4 class="font-bold text-white text-base">${escapeHtml(v.full_name)}</h4>
-                                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${v.verification_status === 'aprobado' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : v.verification_status === 'rechazado' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">${v.verification_status || 'pendiente'}</span>
+                                <h4 class="font-bold text-white text-sm">${escapeHtml(v.full_name)}</h4>
+                                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${v.verification_status === 'aprobado' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">${escapeHtml(v.verification_status || 'pendiente')}</span>
                             </div>
-                            <p class="text-xs text-slate-400">Especialidad: <span class="text-slate-200 font-medium">${escapeHtml(v.infotep_course_name || 'Técnico General')}</span> | Cédula: <span class="text-slate-200 font-medium">${escapeHtml(v.id_card_number || 'N/A')}</span></p>
-                            <p class="text-xs text-slate-400 mt-1">Ubicación: ${escapeHtml(v.province || '')}, ${escapeHtml(v.municipality || '')}</p>
+                            <p class="text-xs text-slate-400">Especialidad: <span class="text-slate-200">${escapeHtml(v.infotep_course_name || 'Técnico')}</span> | Cédula: <span class="text-slate-200 font-mono">${escapeHtml(v.id_card_number || 'N/A')}</span></p>
                         </div>
-                        ${v.verification_status === 'pendiente' || !v.is_verified ? `
-                            <div class="flex items-center space-x-2 w-full md:w-auto">
-                                <button onclick="approveVerification('${v.id}')" class="flex-1 md:flex-initial bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-xl text-xs transition-colors">Aprobar</button>
-                                <button onclick="rejectVerification('${v.id}')" class="flex-1 md:flex-initial bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 px-4 py-2 rounded-xl text-xs transition-colors">Rechazar</button>
-                            </div>
-                        ` : ''}
+                        <div class="flex items-center space-x-2 w-full md:w-auto">
+                            <button onclick="approveVerification('${v.id}')" class="flex-1 md:flex-initial bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-1.5 rounded-xl text-xs transition">Aprobar</button>
+                            <button onclick="rejectVerification('${v.id}')" class="flex-1 md:flex-initial bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 px-4 py-1.5 rounded-xl text-xs transition">Rechazar</button>
+                        </div>
                     </div>
                 `).join('');
             } catch (e) {
-                console.error(e);
+                container.innerHTML = `<p class="text-rose-400 text-xs py-2">${escapeHtml(e.message)}</p>`;
             }
         }
 
         async function approveVerification(id) {
-            if (!confirm('¿Aprobar esta verificación de técnico?')) return;
-            await apiFetch(`/verificaciones/${id}/aprobar`, { method: 'POST' });
-            loadVerifications();
+            if (!confirm('¿Aprobar esta solicitud de técnico verificado?')) return;
+            try {
+                await apiFetch(`/verificaciones/${id}/aprobar`, { method: 'POST' });
+                alert('Técnico aprobado con éxito.');
+                loadVerifications();
+            } catch (e) {
+                alert(e.message);
+            }
         }
 
         async function rejectVerification(id) {
             const reason = prompt('Motivo del rechazo:');
             if (!reason) return;
-            await apiFetch(`/verificaciones/${id}/rechazar`, {
-                method: 'POST',
-                body: JSON.stringify({ motivo: reason })
-            });
-            loadVerifications();
+            try {
+                await apiFetch(`/verificaciones/${id}/rechazar`, {
+                    method: 'POST',
+                    body: JSON.stringify({ motivo: reason })
+                });
+                alert('Solicitud rechazada.');
+                loadVerifications();
+            } catch (e) {
+                alert(e.message);
+            }
         }
 
         // PAYMENTS
         async function loadPayments() {
+            const container = document.getElementById('paymentsList');
+            if (!container) return;
+
             try {
                 const list = await apiFetch('/admin/pagos');
-                const pending = list.filter(p => p.status === 'comprobante_subido' || p.status === 'en_revision');
-
-                const badge = document.getElementById('badge-payments');
-                badge.textContent = pending.length;
-                badge.classList.toggle('hidden', pending.length === 0);
-
-                const container = document.getElementById('paymentsList');
                 if (list.length === 0) {
-                    container.innerHTML = `<p class="text-slate-500 text-sm italic">No hay registros de pagos.</p>`;
+                    container.innerHTML = `<p class="text-slate-500 text-xs italic py-4 text-center">No hay pagos registrados.</p>`;
                     return;
                 }
 
                 container.innerHTML = list.map(p => `
-                    <div class="bg-slate-800 border border-slate-700/70 p-5 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="bg-slate-800 border border-slate-700/70 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
-                            <div class="flex items-center space-x-2 mb-1">
-                                <span class="font-bold text-white text-base">RD$ ${Number(p.total_amount_rd || 0).toLocaleString()}</span>
-                                <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${p.status === 'confirmado' || p.status === 'liberado' ? 'bg-emerald-500/20 text-emerald-400' : p.status === 'comprobante_subido' ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-700 text-slate-300'}">${p.status}</span>
-                            </div>
-                            <p class="text-xs text-slate-400">Referencia: <span class="font-mono text-slate-200">${escapeHtml(p.transfer_reference || 'N/A')}</span></p>
-                            ${p.receipt_url ? `<a href="${escapeHtml(p.receipt_url)}" target="_blank" class="inline-flex items-center space-x-1 text-xs text-emerald-400 hover:underline mt-2"><i class="fa-solid fa-receipt"></i><span>Ver Comprobante Depósito</span></a>` : ''}
+                            <span class="font-bold text-white text-sm">RD$ ${Number(p.total_amount_rd || 0).toLocaleString()}</span>
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ml-2 ${p.status === 'confirmado' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">${escapeHtml(p.status)}</span>
+                            <p class="text-xs text-slate-400 mt-1">Ref: <span class="font-mono text-slate-200">${escapeHtml(p.transfer_reference || 'N/A')}</span></p>
                         </div>
                         ${p.status === 'comprobante_subido' || p.status === 'en_revision' ? `
-                            <div class="flex items-center space-x-2">
-                                <button onclick="verifyPayment('${p.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-xl text-xs transition-colors">Validar Pago</button>
-                            </div>
+                            <button onclick="verifyPayment('${p.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-1.5 rounded-xl text-xs transition">Confirmar Depósito</button>
                         ` : ''}
                     </div>
                 `).join('');
             } catch (e) {
-                console.error(e);
+                container.innerHTML = `<p class="text-rose-400 text-xs py-2">${escapeHtml(e.message)}</p>`;
             }
         }
 
         async function verifyPayment(id) {
-            if (!confirm('¿Confirmar que el depósito bancario fue recibido en la cuenta de ServiYa?')) return;
-            await apiFetch(`/admin/pagos/${id}/confirmar`, { method: 'POST' });
-            loadPayments();
-        }
-
-        // DISPUTES & REPORTS
-        async function loadDisputes() {
+            if (!confirm('¿Validar depósito bancario recibido?')) return;
             try {
-                const disputes = await apiFetch('/reportes/disputas');
-                const reports = await apiFetch('/reportes/reportes');
-
-                const openDisputes = disputes.filter(d => d.status === 'abierta');
-                document.getElementById('badge-disputes').textContent = openDisputes.length;
-                document.getElementById('badge-disputes').classList.toggle('hidden', openDisputes.length === 0);
-                document.getElementById('statDisputes').textContent = openDisputes.length;
-
-                const dispContainer = document.getElementById('disputesList');
-                dispContainer.innerHTML = disputes.length === 0 ? `<p class="text-slate-500 text-sm italic">Sin disputas activas.</p>` : disputes.map(d => `
-                    <div class="bg-slate-800 border border-slate-700/70 p-4 rounded-xl space-y-2">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-bold text-white text-sm">${d.reason}</h4>
-                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${d.status === 'abierta' ? 'bg-rose-500/20 text-rose-300' : 'bg-slate-700 text-slate-300'}">${d.status}</span>
-                        </div>
-                        <p class="text-xs text-slate-300">${d.description}</p>
-                        ${d.status === 'abierta' ? `
-                            <button onclick="resolveDispute('${d.id}')" class="mt-2 w-full bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 py-1.5 rounded-lg text-xs font-semibold transition-colors">Intervenir & Resolver</button>
-                        ` : ''}
-                    </div>
-                `).join('');
-
-                const repContainer = document.getElementById('reportsList');
-                repContainer.innerHTML = reports.length === 0 ? `<p class="text-slate-500 text-sm italic">Sin reportes registrados.</p>` : reports.map(r => `
-                    <div class="bg-slate-800 border border-slate-700/70 p-4 rounded-xl space-y-2">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-bold text-white text-sm">${r.reason}</h4>
-                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">${r.status}</span>
-                        </div>
-                        <p class="text-xs text-slate-300">${r.description}</p>
-                    </div>
-                `).join('');
-
+                await apiFetch(`/admin/pagos/${id}/confirmar`, { method: 'POST' });
+                alert('Pago verificado y liberado.');
+                loadPayments();
             } catch (e) {
-                console.error(e);
+                alert(e.message);
             }
         }
 
-        async function resolveDispute(id) {
-            const notes = prompt('Notas de resolución/arbitraje:');
-            if (!notes) return;
-            await apiFetch(`/reportes/disputas/${id}/resolver`, {
-                method: 'POST',
-                body: JSON.stringify({ resolution_notes: notes })
-            });
-            loadDisputes();
+        // DISPUTES
+        async function loadDisputes() {
+            try {
+                const disputes = await apiFetch('/reportes/disputas');
+                const dispContainer = document.getElementById('disputesList');
+                if (dispContainer) {
+                    dispContainer.innerHTML = disputes.length === 0 ? `<p class="text-slate-500 text-xs italic py-2">Sin disputas registradas.</p>` : disputes.map(d => `
+                        <div class="bg-slate-800 border border-slate-700/70 p-3.5 rounded-xl space-y-1">
+                            <h4 class="font-bold text-white text-xs">${escapeHtml(d.reason)}</h4>
+                            <p class="text-xs text-slate-300">${escapeHtml(d.description)}</p>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {
+                console.warn(e);
+            }
         }
 
         // USERS
         async function loadUsers() {
+            const tableBody = document.getElementById('usersTableBody');
+            if (!tableBody) return;
+
             try {
-                const role = document.getElementById('userRoleFilter').value;
-                const users = await apiFetch(`/admin/users${role ? `?role=${role}` : ''}`);
+                const list = await apiFetch('/admin/users');
+                if (list.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-xs text-slate-500">No hay usuarios registrados.</td></tr>`;
+                    return;
+                }
 
-                document.getElementById('statTotalUsers').textContent = users.length;
-
-                const tbody = document.getElementById('usersTableBody');
-                tbody.innerHTML = users.map(u => `
+                tableBody.innerHTML = list.map(u => `
                     <tr class="hover:bg-slate-700/30 transition-colors">
-                        <td class="p-4">
-                            <p class="font-bold text-white">${u.full_name}</p>
-                            <p class="text-xs text-slate-400">${u.email}</p>
-                        </td>
-                        <td class="p-4">
-                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${u.role === 'admin' ? 'bg-purple-500/20 text-purple-300' : u.role === 'tecnico' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-blue-500/20 text-blue-300'}">${u.role}</span>
-                        </td>
-                        <td class="p-4 text-xs text-slate-300">${u.province || 'N/A'}</td>
-                        <td class="p-4">
-                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${u.is_verified ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-700 text-slate-400'}">${u.is_verified ? 'Verificado' : 'No Verificado'}</span>
-                        </td>
-                        <td class="p-4">
-                            ${u.role !== 'admin' ? `
-                                <button onclick="toggleSuspend('${u.id}', ${!u.is_suspended})" class="text-xs ${u.is_suspended ? 'text-emerald-400 hover:underline' : 'text-rose-400 hover:underline'}">${u.is_suspended ? 'Reactivar' : 'Suspender'}</button>
-                            ` : ''}
+                        <td class="p-4 font-bold text-white text-xs">${escapeHtml(u.full_name)}<br><span class="text-slate-400 font-normal text-[10px]">${escapeHtml(u.email)}</span></td>
+                        <td class="p-4 text-xs font-semibold text-emerald-400 uppercase">${escapeHtml(u.role)}</td>
+                        <td class="p-4 text-xs text-slate-300">${escapeHtml(u.province || 'Santo Domingo')}</td>
+                        <td class="p-4 text-xs">${u.is_verified ? '<span class="text-emerald-400 font-bold">✓ Verificado</span>' : '<span class="text-slate-500">No verificado</span>'}</td>
+                        <td class="p-4 text-xs">
+                            <button onclick="toggleSuspend('${u.id}', ${!u.is_suspended})" class="text-xs text-slate-400 hover:text-white underline">${u.is_suspended ? 'Activar' : 'Suspender'}</button>
                         </td>
                     </tr>
                 `).join('');
             } catch (e) {
-                console.error(e);
+                tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-xs text-rose-400">${escapeHtml(e.message)}</td></tr>`;
             }
         }
 
         async function toggleSuspend(userId, suspend) {
-            if (!confirm(`¿Desea ${suspend ? 'suspender' : 'reactivar'} este usuario?`)) return;
-            await apiFetch(`/admin/users/${userId}/suspend?suspend=${suspend}`, { method: 'PUT' });
-            loadUsers();
+            try {
+                await apiFetch(`/admin/users/${userId}/suspend?suspend=${suspend}`, { method: 'PUT' });
+                loadUsers();
+            } catch (e) {
+                alert(e.message);
+            }
         }
 
-        // COMMISSION & BANKS
-        async function loadCommissionAndBanks() {
+        // SETTINGS
+        async function loadSettings() {
             try {
                 const comm = await apiFetch('/admin/config/commission');
-                document.getElementById('commissionInput').value = comm.platform_commission_rate;
-                document.getElementById('statCommission').textContent = comm.percentage;
-
-                const banks = await apiFetch('/admin/bank-accounts');
-                const container = document.getElementById('bankAccountsList');
-                container.innerHTML = banks.map(b => `
-                    <div class="bg-slate-900 border border-slate-700 p-4 rounded-xl flex justify-between items-center">
-                        <div>
-                            <h4 class="font-bold text-white text-sm">${b.bank_name}</h4>
-                            <p class="text-xs text-slate-400">${b.account_type} | <span class="font-mono text-slate-200">${b.account_number}</span></p>
-                            <p class="text-xs text-slate-400">Titular: ${b.account_holder} (RNC/Cédula: ${b.rnc_or_cedula || 'N/A'})</p>
-                        </div>
-                        <span class="text-[10px] uppercase font-bold px-2.5 py-1 rounded-full ${b.is_active ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-700 text-slate-400'}">${b.is_active ? 'Cuenta Activa' : 'Inactiva'}</span>
-                    </div>
-                `).join('');
+                const input = document.getElementById('commissionInput');
+                if (input && comm.commission_rate !== undefined) {
+                    input.value = comm.commission_rate;
+                }
             } catch (e) {
-                console.error(e);
+                console.warn(e);
             }
         }
 
         async function handleUpdateCommission(e) {
-            e.preventDefault();
-            const val = parseFloat(document.getElementById('commissionInput').value);
-            await apiFetch('/admin/config/commission', {
-                method: 'PUT',
-                body: JSON.stringify({ commission_rate: val })
-            });
-            alert('Tasa de comisión actualizada exitosamente');
-            loadCommissionAndBanks();
+            if (e && e.preventDefault) e.preventDefault();
+            const input = document.getElementById('commissionInput');
+            if (!input) return;
+
+            try {
+                await apiFetch('/admin/config/commission', {
+                    method: 'PUT',
+                    body: JSON.stringify({ commission_rate: parseFloat(input.value) })
+                });
+                alert('Tasa de comisión actualizada exitosamente.');
+            } catch (e) {
+                alert(e.message);
+            }
         }
 
         // ADMINS
         async function loadAdmins() {
+            const container = document.getElementById('adminsList');
+            if (!container) return;
+
             try {
-                const admins = await apiFetch('/admin/administradores');
-                const container = document.getElementById('adminsList');
-                container.innerHTML = admins.map(a => `
-                    <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl flex justify-between items-center">
+                const list = await apiFetch('/admin/administradores');
+                container.innerHTML = list.map(a => `
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
                         <div>
-                            <p class="font-bold text-white text-sm">${a.full_name}</p>
-                            <p class="text-xs text-slate-400">${a.email}</p>
+                            <span class="font-bold text-white block">${escapeHtml(a.full_name)}</span>
+                            <span class="text-slate-400">${escapeHtml(a.email)}</span>
                         </div>
-                        <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">ADMIN</span>
+                        <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded">ADMIN</span>
                     </div>
                 `).join('');
             } catch (e) {
-                console.error(e);
+                container.innerHTML = `<p class="text-rose-400 text-xs py-2">${escapeHtml(e.message)}</p>`;
             }
         }
 
         async function handleCreateAdmin(e) {
-            e.preventDefault();
-            const full_name = document.getElementById('adminFullName').value.trim();
+            if (e && e.preventDefault) e.preventDefault();
+
+            const fullName = document.getElementById('adminFullName').value.trim();
             const email = document.getElementById('adminEmail').value.trim();
             const phone = document.getElementById('adminPhone').value.trim();
             const password = document.getElementById('adminPassword').value.trim();
@@ -796,13 +961,13 @@
             try {
                 await apiFetch('/admin/administradores', {
                     method: 'POST',
-                    body: JSON.stringify({ full_name, email, phone, password })
+                    body: JSON.stringify({ full_name: fullName, email, phone, password })
                 });
-                alert('Administrador creado exitosamente');
+                alert('Nuevo administrador creado correctamente.');
                 document.getElementById('createAdminForm').reset();
                 loadAdmins();
-            } catch (err) {
-                alert(err.message);
+            } catch (e) {
+                alert(e.message);
             }
         }
     </script>
