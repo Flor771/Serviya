@@ -9,9 +9,8 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-    // URL del Backend de FastAPI (Local / Render)
-    // Cambiar por "https://chamba-rd.onrender.com/api/v1/" en producción
-    private const val BASE_URL = "https://ais-dev-wmprgtn55odgjal2pwbjxh-856541202184.us-east1.run.app/api/v1/"
+    // URL del Backend de FastAPI (Render)
+    private const val BASE_URL = "https://serviya-ik7o.onrender.com/api/v1/"
 
     var authToken: String? = null
 

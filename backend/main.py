@@ -1,15 +1,44 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.config import settings
-from backend.database import engine, Base
+from backend.database import engine, Base, SessionLocal
+from backend.models import User
+from backend.auth import get_password_hash
 from backend.routers import (
     auth, chambas, postulaciones, verificaciones, 
     pagos, chat, notificaciones, resenas, estimador, reportes, admin, support
 )
 
-# Initialize database tables
+# Initialize database tables and seed default admin user
 try:
     Base.metadata.create_all(bind=engine)
+    
+    # Auto-seed default admin user if not exists
+    db = SessionLocal()
+    try:
+        admin_email = "admin@chamba.do"
+        existing_admin = db.query(User).filter(User.email == admin_email).first()
+        if not existing_admin:
+            new_admin = User(
+                email=admin_email,
+                password_hash=get_password_hash("¡AdminPass123!"),
+                full_name="Administrador Principal",
+                phone="809-555-0100",
+                role="admin",
+                province="Distrito Nacional",
+                municipality="Santo Domingo",
+                description="Administrador autorizado de ServiYa",
+                is_verified=True,
+                verification_status="aprobado"
+            )
+            db.add(new_admin)
+            db.commit()
+            print("Successfully created default admin user: admin@chamba.do")
+    except Exception as e:
+        db.rollback()
+        print(f"Warning: Error seeding default admin user: {e}")
+    finally:
+        db.close()
 except Exception as e:
     print(f"Warning: Error creating DB tables on startup: {e}")
 
@@ -24,7 +53,12 @@ app = FastAPI(
 # CORS Middleware configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=[
+        "https://serviya-ik7o.onrender.com",
+        "http://localhost:8000",
+        "http://localhost:3000",
+        "*"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -55,7 +89,7 @@ def serve_manifest():
         return FileResponse("manifest.webmanifest", media_type="application/manifest+json")
     if os.path.exists("public/manifest.webmanifest"):
         return FileResponse("public/manifest.webmanifest", media_type="application/manifest+json")
-    return {"name": "CHAMBA RD", "short_name": "CHAMBA RD"}
+    return {"name": "ServiYa", "short_name": "ServiYa"}
 
 @app.get("/sw.js")
 def serve_service_worker():
@@ -91,7 +125,7 @@ def root():
     if os.path.exists("public/index.html"):
         return FileResponse("public/index.html", media_type="text/html")
     return {
-        "app": "CHAMBA RD API",
+        "app": "ServiYa API",
         "status": "online",
         "version": "1.0.0",
         "region": "República Dominicana 🇩🇴",
@@ -101,3 +135,4 @@ def root():
 @app.get("/health")
 def health_check():
     return {"status": "healthy", "database": "connected"}
+
